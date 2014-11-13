@@ -1,0 +1,35 @@
+{
+  "name": "html_table_reporter",
+  "version": "0.0.1",
+  "description": "A visually appealing html reporter for mocha",
+  "keywords": [
+    "mocha",
+    "reporter",
+    "html",
+    "visual"
+  ],
+  "author": {
+    "name": "Gauge",
+    "email": "Gauger16@gmail.com"
+  },
+  
+  "directories": {
+    "structure": "./structure"
+  },
+  
+  "main": "main.js",
+  
+  "devDependencies": {
+    "mocha": "1.6.x"
+  },
+
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "readme": "I was shocked to see that others had not created an html reporter before me.\r\nThe goal of this project is to create a pleasant visual representation for\r\na mocha test run. This inclueds the folowing:\r\n\r\nA fancy\theader \t\t\t\t\t\t\t\t\t- TODO\r\nCollapsible heirachy object tree \t\t\t\t- COMPLETE\r\nSuite and test names \t\t\t\t\t\t\t- COMPLETE\r\nSuite and test run times \t\t\t\t\t\t- INPROGRESS\r\ntotal test execution stats \t\t\t\t\t\t- INPROGRESS\r\nA cool pi chart or something to denote success \t- TODO\r\n\r\n",
+  "readmeFilename": "Readme.md",
+  "_id": "html_table_reporter@0.0.1",
+  "_shasum": "94ee2481d1f3faf6590ade1d11ac930fd04fbc26",
+  "_resolved": "C:\\html_table_reporter-0.0.1.tgz",
+  "_from": "C:\\html_table_reporter-0.0.1.tgz"
+}
