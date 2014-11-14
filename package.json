@@ -13,10 +13,6 @@
     "email": "Gauger16@gmail.com"
   },
   
-  "directories": {
-    "structure": "./structure"
-  },
-  
   "main": "main.js",
   
   "devDependencies": {

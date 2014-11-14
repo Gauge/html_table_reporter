@@ -1,0 +1,84 @@
+<html>
+	<head>
+		<style type="text/css">
+			body {
+				background-color: SeaShell
+			}
+			table {
+				border-collapse: collapse; 
+				margin-left: auto; 
+				margin-right: auto; 
+				width: 70%; 
+				background-color: #E7EDF5; 
+				table-layout: fixed;
+			}
+			th, td {
+				border: 1px solid black;
+				word-break: break-word;
+			}
+
+			.indent {
+				width: 20px;
+			}
+			.duration {
+				width: 50px;
+			}
+			.title  {
+				width: auto;
+			}
+			.passedState {
+				color: white; 
+				background-color: DarkGreen; 
+				width: 45px; 
+				text-align: right;
+			}
+			.failedState {
+				color: white; 
+				background-color: DarkRed; 
+				width: 45px; 
+				text-align: right;
+			}
+			.passed {
+				background-color: #33CC66;
+			}
+			.failed {
+				background-color: #E0A7A7;
+			}
+			.failDetail {
+				width: auto; 
+				word-wrap: break-word;
+			}
+			.hypertext {
+				text-decoration: underline; 
+				color: blue;
+			}
+			.endStyle {
+				text-align: center; 
+				background-color: #E7EDF5; 
+				width: 150px; 
+				margin-left: auto; 
+				margin-right: auto;
+			}
+		</style>
+
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script>
+			var showHide = function(id,pid) { 
+				var element = $("."+id); 
+				var pelement = $("."+pid); 
+				if (pelement.css("display") == "none") { 
+					element.toggle(false); 
+					element.click(); 
+				} else { 
+					element.toggle(); 
+					if (element.css("display") == "none") {
+						element.click();
+					}
+				}
+			}
+
+			window.onload = function() {
+			}
+		</script>
+	</head>
+	<body>
