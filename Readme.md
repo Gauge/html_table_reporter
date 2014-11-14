@@ -1,4 +1,3 @@
-I was shocked to see that others had not created an html reporter before me.
 The goal of this project is to create a pleasant visual representation for
 a mocha test run. This inclueds the folowing:
 
