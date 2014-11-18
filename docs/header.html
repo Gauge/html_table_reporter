@@ -4,16 +4,23 @@
 			body {
 				background-color: SeaShell
 			}
-			table {
-				border-collapse: collapse; 
+
+			div {
 				margin-left: auto; 
-				margin-right: auto; 
-				width: 70%; 
+				margin-right: auto;
+				width: 70%;
+				border: 5px ridge #E3EAF2;
+			}
+			
+			table {
+				width: 100%;
+				border-collapse: collapse;   
 				background-color: #E7EDF5; 
 				table-layout: fixed;
 			}
-			th, td {
-				border: 1px solid black;
+			td {
+				border-left: 1px solid black;
+				border-bottom: 1px solid black;
 				word-break: break-word;
 			}
 
@@ -21,29 +28,43 @@
 				width: 20px;
 			}
 			.duration {
-				width: 50px;
+				width: 75px;
 			}
 			.title  {
 				width: auto;
 			}
+
+			.suite {
+				border-bottom: 4px ridge gray;
+			}
+
+			.passedState, .failedState, .pendingState {
+				color: white;
+				text-align: center;
+				width: 60px; 
+			}
+
 			.passedState {
-				color: white; 
 				background-color: DarkGreen; 
-				width: 45px; 
-				text-align: right;
 			}
-			.failedState {
-				color: white; 
-				background-color: DarkRed; 
-				width: 45px; 
-				text-align: right;
+			.failedState { 
+				background-color: DarkRed;  
 			}
+			.pendingState { 
+				background-color: #9A9A9A; 
+			}
+
 			.passed {
-				background-color: #33CC66;
+				background-color: #7EDF9F;
 			}
 			.failed {
 				background-color: #E0A7A7;
 			}
+
+			.pending {
+				background-color: #DCDCDC
+			}
+
 			.failDetail {
 				width: auto; 
 				word-wrap: break-word;
@@ -78,7 +99,9 @@
 			}
 
 			window.onload = function() {
+				$(".failed").click();
 			}
 		</script>
 	</head>
 	<body>
+		<div>

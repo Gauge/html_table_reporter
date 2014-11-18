@@ -11,20 +11,25 @@ module.exports = function (runner) {
     pending: 0
   };
 
-  // where all the data is stored
-  var doc = '';
   var suites = '';
 
   runner.on('start', function() {
     var value = fs.readFileSync(path.join(__dirname, 'docs/header.html'), "utf8");
-    doc = value;
     console.log(value);
   });
 
 
   runner.on('end', function() {
     var value = fs.readFileSync(path.join(__dirname, 'docs/footer.html'), "utf8");
-    doc += value;
+    // make sure to close previous div
+    var totals = '</div><div class="endStyle">'+
+      '<div>Total: '+(status.pass+status.fail+status.pending)+'</div>'+
+      '<div style="color: DarkGreen;">Passed: ' + status.pass + '</div>' +
+      '<div style="color: DarkRed;">Failed: ' + status.fail + '</div>' +
+      '<div style="color: #9A9A9A;">Pending: ' + status.pending + '</div>' +
+    '</div>';
+
+    value = totals+value;
     console.log(value);
   });
 
@@ -55,18 +60,15 @@ module.exports = function (runner) {
       var parentReference = title+depth;
       var state = test.state
 
-      if (state == 'passed') status.pass++;
-      if (state == 'failed') status.fail++;
-      if (state == 'undefined') status.pending++; 
-
       if (state == 'failed') {
+        status.fail++;
         errorcount++;
         tests += '<table cellspacing="0" cellpadding="0">'+
           '<tr onclick="showHide(\''+parentReference+'err'+errorcount+'\', \''+parentReference+'\')" class="'+parentReference+' failed">' +
             addIndentation(depth+1) + // tests reside one step deaper than its parent suite
-            '<td class="duration">'+ test.duration + 'ms</td>'+
+            '<td class="duration">'+ test.duration + ' ms</td>'+
             '<td class="title hypertext">'+ test.title + '</td>' +
-            '<td class="'+state+'State">'+ state + '</td>' +
+            '<td class="failedState">Failed</td>' +
           '</tr>'+
         '</table>';
 
@@ -80,32 +82,43 @@ module.exports = function (runner) {
             '</td>'+
           '</table>';
       
-      } else {
+      } else if (state == 'passed') {
+        status.pass++;
         tests += '<table cellspacing="0" cellpadding="0">'+
-          '<tr class="'+parentReference+' '+state+'" >' +
+          '<tr class="'+parentReference+' passed" >' +
             addIndentation(depth+1) + // tests reside one step deaper than its parent suite
-            '<td class="duration">'+ test.duration + 'ms</td>'+
+            '<td class="duration">'+ test.duration + ' ms</td>'+
             '<td class="title">'+ test.title + '</td>' +
-            '<td class="'+state+'State">'+ state + '</td>' +
+            '<td class="passedState">Passed</td>' +
+          '</tr>'+
+        '</table>';
+
+      } else if (test.pending) {
+        status.pending++;
+        tests += '<table cellspacing="0" cellpadding="0">'+
+          '<tr class="'+parentReference+' pending" >' +
+            addIndentation(depth+1) +
+            '<td class="duration">0 ms</td>'+
+            '<td class="title">'+ test.title + '</td>' +
+            '<td class="pendingState">Pending</td>' +
           '</tr>'+
         '</table>';
       }
     });
 
-    var text = '';
-    text += '<table cellspacing="0" cellpadding="0">'+
-      '<tr onclick="showHide(\''+title+depth+'\', \''+ptitle+(depth-1)+'\')" class="'+ptitle+(depth-1)+'">'+
+    var thisSuite = '';
+    thisSuite += '<table cellspacing="0" cellpadding="0">'+
+      '<tr onclick="showHide(\''+title+depth+'\', \''+ptitle+(depth-1)+'\')" class="'+ptitle+(depth-1)+' suite">'+
         addIndentation(depth) +
         '<td style="width: auto" class="hypertext">'+ suite.title + '</td>'  +
       '</tr></table>';
-    text += tests;
+    thisSuite += tests;
 
-    suites = (visited[depth] == 1)? suites+text : text+suites;
+    suites = (visited[depth] == 1)? suites+thisSuite : thisSuite+suites;
     visited[depth] = 1;
     lastdepth = depth;
 
     if (suite.depth == 1) { // reset the stored suites for the next heirarchy
-      doc += suites;
       console.log(suites);
       suites = '';
       return;
@@ -124,14 +137,13 @@ var addIndentation = function(indent) {
     
     var color = (16*i) + 56;
     var colorText = 'rgb('+color+','+color+','+color+')'
-
     data += '<td style="background-color: '+colorText+';" class="indent"></td>';
   }
   return data;
 }
 
 var removeSpecialChars = function(text) {
-  var chars = '!@#$%^&\*()+=[]{}\\\'\"\s<>/';
+  var chars = '\.!@#$%^&\*()+=[]{}\\\'\"\s<>/';
 
   for (var i=0; i<chars.length; i++) {
     var value = chars[i];
@@ -147,7 +159,7 @@ var setupVisitedArray = function(depth) {
     visited.push(0);
   }
 
-  for(var i=lastdepth; i<visited.length; i++){
+  for(var i=lastdepth; i<depth; i++){
     visited[i] = 0;
   }
 }
