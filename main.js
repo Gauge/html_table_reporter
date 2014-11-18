@@ -1,8 +1,7 @@
 var path = require('path');
 var fs = require('fs');
 
-var lastdepth = -1; 
-var visited = [];
+var root = {};
 
 module.exports = function (runner) {
   var status = {
@@ -11,8 +10,6 @@ module.exports = function (runner) {
     pending: 0
   };
 
-  var suites = '';
-
   runner.on('start', function() {
     var value = fs.readFileSync(path.join(__dirname, 'docs/header.html'), "utf8");
     console.log(value);
@@ -20,13 +17,14 @@ module.exports = function (runner) {
 
 
   runner.on('end', function() {
+    displayHTML(root);
     var value = fs.readFileSync(path.join(__dirname, 'docs/footer.html'), "utf8");
     // make sure to close previous div
     var totals = '</div><div class="endStyle">'+
       '<div>Total: '+(status.pass+status.fail+status.pending)+'</div>'+
       '<div style="color: DarkGreen;">Passed: ' + status.pass + '</div>' +
       '<div style="color: DarkRed;">Failed: ' + status.fail + '</div>' +
-      '<div style="color: #9A9A9A;">Pending: ' + status.pending + '</div>' +
+      '<div style="color: DarkOrange;">Pending: ' + status.pending + '</div>' +
     '</div>';
 
     value = totals+value;
@@ -45,11 +43,12 @@ module.exports = function (runner) {
   });
 
   runner.on('suite end', function(suite) {
-    if (suite.root) return; // do not do anything if its the root
+    if (suite.root) { // do not do anything if its the root
+      root = suite;
+      return;
+    }
 
     var depth = suite.depth;
-    if (lastdepth == -1) lastdepth = depth;
-    setupVisitedArray(depth);
 
     var errorcount = 0;
     var title = removeSpecialChars(suite.title);
@@ -114,15 +113,7 @@ module.exports = function (runner) {
       '</tr></table>';
     thisSuite += tests;
 
-    suites = (visited[depth] == 1)? suites+thisSuite : thisSuite+suites;
-    visited[depth] = 1;
-    lastdepth = depth;
-
-    if (suite.depth == 1) { // reset the stored suites for the next heirarchy
-      console.log(suites);
-      suites = '';
-      return;
-    }
+    suite.htmlDisplay = thisSuite;
   });
 
   runner.on('fail', function(test, err){
@@ -154,12 +145,9 @@ var removeSpecialChars = function(text) {
   return text;
 }
 
-var setupVisitedArray = function(depth) {
-  while(visited.length <= depth) {
-    visited.push(0);
-  }
-
-  for(var i=lastdepth; i<depth; i++){
-    visited[i] = 0;
-  }
+var displayHTML = function(suite) {
+  if (suite.htmlDisplay) console.log(suite.htmlDisplay);
+  suite.suites.forEach(function(suite, index, array) {
+    displayHTML(suite);
+  });
 }
