@@ -1,15 +1,28 @@
-The goal of this project is to create a pleasant visual representation for
-a mocha test run. This inclueds the folowing:
+## Basic install and use
 
-A fancy header																	- TODO
+```
+npm install html_table_reporter
 
-Collapsible heirachy object tree 				        - COMPLETE
+mocha -R html_table_reporter ./testpath
+```
 
-Suite and test names 							              - COMPLETE
+The end result will look something like this
 
-Suite and test run times 						            - INPROGRESS
+[](http://i1343.photobucket.com/albums/o790/Benjamin_Pratt/Untitled_zps23dd3443.png)
 
-total test execution stats 						          - INPROGRESS
-
-A cool pi chart or something to denote success 	- TODO
-
+|TODO										|Status   	|
+---------------------------------------------------------
+|Display suites in hierarchy  				|Complete 	|
+---------------------------------------------------------
+|Display tests for each suite 				|Complete 	|
+---------------------------------------------------------
+|Display tests errors on fail				|Complete 	|
+---------------------------------------------------------
+|Display test results						|Complete 	|
+---------------------------------------------------------
+|Display sub test results					|Complete 	|
+---------------------------------------------------------
+|Create collapable rows						|Complete 	|
+---------------------------------------------------------
+|Add Some super sweet graph or something 	|Incomplete |
+---------------------------------------------------------

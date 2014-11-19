@@ -105,15 +105,19 @@ module.exports = function (runner) {
       }
     });
 
-    var thisSuite = '';
-    thisSuite += '<table cellspacing="0" cellpadding="0">'+
+    var result = generateResult(suite);
+    var display = '';
+    display += '<table cellspacing="0" cellpadding="0">'+
       '<tr onclick="showHide(\''+title+depth+'\', \''+ptitle+(depth-1)+'\')" class="'+ptitle+(depth-1)+' suite">'+
         addIndentation(depth) +
-        '<td style="width: auto" class="hypertext">'+ suite.title + '</td>'  +
+        '<td style="width: auto" class="hypertext">'+ suite.title + '</td>' +
+        '<td class="subTotal" style="color: DarkGreen;">Pass: ' + result.pass + '</td>' +
+        '<td class="subTotal" style="color: DarkRed;">Fail: ' + result.fail + '</td>' +
+        '<td class="subTotal" style="color: DarkOrange;">Pend: ' + result.pending + '</td>' +
       '</tr></table>';
-    thisSuite += tests;
+    display += tests;
 
-    suite.htmlDisplay = thisSuite;
+    suite.htmlDisplay = display;
   });
 
   runner.on('fail', function(test, err){
@@ -147,7 +151,26 @@ var removeSpecialChars = function(text) {
 
 var displayHTML = function(suite) {
   if (suite.htmlDisplay) console.log(suite.htmlDisplay);
-  suite.suites.forEach(function(suite, index, array) {
-    displayHTML(suite);
+  suite.suites.forEach(function(sub, index, array) {
+    displayHTML(sub);
   });
+}
+
+var generateResult = function(suite) {
+  var result = { pass: 0, fail: 0, pending: 0 };
+
+  suite.suites.forEach(function(sub, index, array) {
+    var reTotal = generateResult(sub);
+    result.pass += reTotal.pass;
+    result.fail += reTotal.fail;
+    result.pending += reTotal.pending;
+  });
+
+  suite.tests.forEach(function(test, index, array) {
+    if (test.pending) result.pending++;
+    else if (test.state == 'failed') result.fail++;
+    else if (test.state == 'passed') result.pass++;
+  });
+
+  return result;
 }

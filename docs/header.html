@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<style type="text/css">
+			/* general */
 			body {
 				background-color: SeaShell
 			}
@@ -8,7 +9,7 @@
 			div {
 				margin-left: auto; 
 				margin-right: auto;
-				width: 70%;
+				width: 80%;
 				border: 5px ridge #E3EAF2;
 			}
 			
@@ -27,15 +28,27 @@
 			.indent {
 				width: 20px;
 			}
-			.duration {
-				width: 90px;
+
+			/* suite */
+			.suite {
+				border-bottom: 4px ridge gray;
 			}
+
+			.subTotal {
+				color: white;
+				text-align: left;
+				width: 75px;
+				font-weight: bold;
+			}
+
+
+			/* tests */
 			.title  {
 				width: auto;
 			}
 
-			.suite {
-				border-bottom: 4px ridge gray;
+			.duration {
+				width: 90px;
 			}
 
 			.passedState, .failedState, .pendingState {
@@ -69,6 +82,8 @@
 				width: auto; 
 				word-wrap: break-word;
 			}
+
+			/* other */
 			.hypertext {
 				text-decoration: underline; 
 				color: blue;
