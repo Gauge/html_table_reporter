@@ -7,7 +7,8 @@ module.exports = function (runner) {
   var status = {
     pass: 0,
     fail: 0,
-    pending: 0
+    pending: 0,
+    duration: 0
   };
 
   runner.on('start', function() {
@@ -24,7 +25,8 @@ module.exports = function (runner) {
       '<div>Total: '+(status.pass+status.fail+status.pending)+'</div>'+
       '<div style="color: DarkGreen;">Passed: ' + status.pass + '</div>' +
       '<div style="color: DarkRed;">Failed: ' + status.fail + '</div>' +
-      '<div style="color: DarkOrange;">Pending: ' + status.pending + '</div>' +
+      '<div style="color: DarkBlue;">Pending: ' + status.pending + '</div>' +
+      '<div style="color: black">' + getTime(status.duration) + '</div>' +
     '</div>';
 
     value = totals+value;
@@ -62,6 +64,7 @@ module.exports = function (runner) {
       if (state == 'failed') {
         status.fail++;
         errorcount++;
+        status.duration += (test.duration != undefined) ? test.duration : 0;
         tests += '<table cellspacing="0" cellpadding="0">'+
           '<tr onclick="showHide(\''+parentReference+'err'+errorcount+'\', \''+parentReference+'\')" class="'+parentReference+' failed">' +
             addIndentation(depth+1) + // tests reside one step deaper than its parent suite
@@ -83,6 +86,7 @@ module.exports = function (runner) {
       
       } else if (state == 'passed') {
         status.pass++;
+        status.duration += (test.duration != undefined) ? test.duration : 0;
         tests += '<table cellspacing="0" cellpadding="0">'+
           '<tr class="'+parentReference+' passed" >' +
             addIndentation(depth+1) + // tests reside one step deaper than its parent suite
@@ -113,7 +117,8 @@ module.exports = function (runner) {
         '<td style="width: auto" class="hypertext">'+ suite.title + '</td>' +
         '<td class="subTotal" style="color: DarkGreen;">Pass: ' + result.pass + '</td>' +
         '<td class="subTotal" style="color: DarkRed;">Fail: ' + result.fail + '</td>' +
-        '<td class="subTotal" style="color: DarkOrange;">Pend: ' + result.pending + '</td>' +
+        '<td class="subTotal" style="color: DarkBlue;">Pend: ' + result.pending + '</td>' +
+        '<td class="subTotal" style="color: black; width: 100px;">'+ getTime(result.duration) + '</td>' +
       '</tr></table>';
     display += tests;
 
@@ -151,26 +156,43 @@ var removeSpecialChars = function(text) {
 
 var displayHTML = function(suite) {
   if (suite.htmlDisplay) console.log(suite.htmlDisplay);
+  if (suite.suites == undefined) return;
   suite.suites.forEach(function(sub, index, array) {
     displayHTML(sub);
   });
 }
 
 var generateResult = function(suite) {
-  var result = { pass: 0, fail: 0, pending: 0 };
+  var result = { pass: 0, fail: 0, pending: 0, duration: 0 };
 
   suite.suites.forEach(function(sub, index, array) {
     var reTotal = generateResult(sub);
     result.pass += reTotal.pass;
     result.fail += reTotal.fail;
     result.pending += reTotal.pending;
+    result.duration += reTotal.duration;
   });
 
   suite.tests.forEach(function(test, index, array) {
     if (test.pending) result.pending++;
     else if (test.state == 'failed') result.fail++;
     else if (test.state == 'passed') result.pass++;
+    result.duration += (test.duration != null) ? test.duration : 0;
+
   });
 
   return result;
+}
+
+var getTime = function(ms) {
+  x = ms / 1000
+  seconds = Math.floor(x % 60);
+  x /= 60
+  minutes = Math.floor(x % 60);
+  x /= 60
+  hours = Math.floor(x % 24);
+  x /= 24
+  days = Math.floor(x);
+
+  return days+'d'+' '+hours+':'+minutes+':'+seconds;
 }
