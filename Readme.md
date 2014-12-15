@@ -8,7 +8,7 @@ mocha -R html_table_reporter ./testpath
 
 The end result will look something like this
 
-![](http://i1343.photobucket.com/albums/o790/Benjamin_Pratt/Untitled_zps23dd3443.png)
+![](http://i1343.photobucket.com/albums/o790/Benjamin_Pratt/Untitled_zpse142907c.png)
 
 |TODO	                                    |Status   	|
 | --------------------------------------- | --------- |
