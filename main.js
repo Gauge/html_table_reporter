@@ -66,10 +66,11 @@ module.exports = function (runner) {
         errorcount++;
         status.duration += (test.duration != undefined) ? test.duration : 0;
         tests += '<table cellspacing="0" cellpadding="0">'+
-          '<tr onclick="showHide(\''+parentReference+'err'+errorcount+'\', \''+parentReference+'\')" class="'+parentReference+' failed">' +
+          '<tr id="'+parentReference+'err'+errorcount+'" onclick="showHide(\''+parentReference+'err'+errorcount+'\', \''+parentReference+'\')" class="'+parentReference+' failed">' +
             addIndentation(depth+1) + // tests reside one step deaper than its parent suite
+            '<td id="image" class="expanded"></td>' +
             '<td class="duration">'+ test.duration + ' ms</td>'+
-            '<td class="title hypertext">'+ test.title + '</td>' +
+            '<td class="title">'+ test.title + '</td>' +
             '<td class="failedState">Failed</td>' +
           '</tr>'+
         '</table>';
@@ -112,13 +113,14 @@ module.exports = function (runner) {
     var result = generateResult(suite);
     var display = '';
     display += '<table cellspacing="0" cellpadding="0">'+
-      '<tr onclick="showHide(\''+title+depth+'\', \''+ptitle+(depth-1)+'\')" class="'+ptitle+(depth-1)+' suite">'+
+      '<tr id="'+title+depth+'" onclick="showHide(\''+title+depth+'\', \''+ptitle+(depth-1)+'\')" class="'+ptitle+(depth-1)+' suite">'+
         addIndentation(depth) +
-        '<td style="width: auto" class="hypertext">'+ suite.title + '</td>' +
+        '<td id="image" class="expanded"></td>' +
+        '<td class="title">'+ suite.title + '</td>' +
         '<td class="subTotal" style="color: DarkGreen;">Pass: ' + result.pass + '</td>' +
         '<td class="subTotal" style="color: DarkRed;">Fail: ' + result.fail + '</td>' +
         '<td class="subTotal" style="color: DarkBlue;">Pend: ' + result.pending + '</td>' +
-        '<td class="subTotal" style="color: black; width: 100px;">'+ getTime(result.duration) + '</td>' +
+        '<td class="subTotal" style="color: black; width: 120px;">'+ getTime(result.duration) + '</td>' +
       '</tr></table>';
     display += tests;
 
@@ -184,8 +186,9 @@ var generateResult = function(suite) {
   return result;
 }
 
-var getTime = function(ms) {
-  x = ms / 1000
+var getTime = function(x) {
+  ms = Math.floor(x % 1000);
+  x /= 1000
   seconds = Math.floor(x % 60);
   x /= 60
   minutes = Math.floor(x % 60);
@@ -194,5 +197,5 @@ var getTime = function(ms) {
   x /= 24
   days = Math.floor(x);
 
-  return days+'d'+' '+hours+':'+minutes+':'+seconds;
+  return days+'d'+' '+hours+':'+minutes+':'+seconds+':'+ms;
 }
