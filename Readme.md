@@ -8,7 +8,7 @@ mocha -R html_table_reporter ./testpath
 
 The end result will look something like this
 
-![](http://i1343.photobucket.com/albums/o790/Benjamin_Pratt/Untitled_zpse142907c.png)
+![](http://i1343.photobucket.com/albums/o790/Benjamin_Pratt/Untitled_zpsfd5ab49c.png)
 
 |TODO	                                    |Status   	|
 | --------------------------------------- | --------- |
@@ -18,4 +18,4 @@ The end result will look something like this
 |Display test results                     |Complete 	|
 |Display sub test results                 |Complete 	|
 |Create collapable rows                   |Complete 	|
-|Add Some super sweet graph or something  |Incomplete |
+|Add Some super sweet graph or something  |Complete |

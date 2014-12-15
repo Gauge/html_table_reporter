@@ -11,26 +11,38 @@ module.exports = function (runner) {
     duration: 0
   };
 
-  runner.on('start', function() {
-    var value = fs.readFileSync(path.join(__dirname, 'docs/header.html'), "utf8");
-    console.log(value);
-  });
-
-
   runner.on('end', function() {
-    displayHTML(root);
-    var value = fs.readFileSync(path.join(__dirname, 'docs/footer.html'), "utf8");
-    // make sure to close previous div
-    var totals = '</div><div class="endStyle">'+
-      '<div>Total: '+(status.pass+status.fail+status.pending)+'</div>'+
-      '<div style="color: DarkGreen;">Passed: ' + status.pass + '</div>' +
-      '<div style="color: DarkRed;">Failed: ' + status.fail + '</div>' +
-      '<div style="color: DarkBlue;">Pending: ' + status.pending + '</div>' +
-      '<div style="color: black">' + getTime(status.duration) + '</div>' +
-    '</div>';
+    console.log('<html>'); // start doc
+    var value = fs.readFileSync(path.join(__dirname, 'docs/header.html'), "utf8"); // get header file
+    console.log(value); // write header
+    console.log('<body>'); // start body
 
-    value = totals+value;
-    console.log(value);
+    var totalTests = status.pass+status.fail+status.pending;
+
+    var totals = '<div style="height:120px;"><div class="totalsLeft">'+
+      '<div class="innerDiv" style="color: black">Run Time: ' + getTime(status.duration) + '</div>' +
+      '<div class="innerDiv">Total: '+totalTests+'</div>'+
+      '<div class="innerDiv" style="color: DarkGreen;">Passed: ' + status.pass + '</div>' +
+      '<div class="innerDiv" style="color: DarkRed;">Failed: ' + status.fail + '</div>' +
+      '<div class="innerDiv" style="color: DarkBlue;">Pending: ' + status.pending + '</div>' +
+    '</div>';
+    console.log(totals);
+
+    var width = 695;
+    var passWidth = (status.pass / totalTests) * width;
+    var failWidth = (status.fail / totalTests) * width;
+    var pendWidth = (status.pending / totalTests) * width;
+
+    var percentages = '<div class="totalsRight" style="width: '+width+'px;">' +
+          '<div class="innerDiv" style="width:'+passWidth+'px; background-color: DarkGreen; height:50px; float:left;">'+((status.pass / totalTests)*100).toFixed(0)+'%</div>' +
+          '<div class="innerDiv" style="width:'+failWidth+'px; background-color: DarkRed; height:50px; float:left;">'+((status.fail / totalTests)*100).toFixed(0)+'%</div>' +
+          '<div class="innerDiv" style="width:'+pendWidth+'px; background-color: DarkBlue; height:50px; float:left;">'+((status.pending / totalTests)*100).toFixed(0)+'%</div>' +
+      '</div></div>';
+    console.log(percentages);
+
+    console.log('<div id="reportTable">'); // table div
+    displayHTML(root); // print table
+    console.log('</div></body></html>'); // close the report 
   });
 
   runner.on('suite', function(suite) {
@@ -91,7 +103,7 @@ module.exports = function (runner) {
         tests += '<table cellspacing="0" cellpadding="0">'+
           '<tr class="'+parentReference+' passed" >' +
             addIndentation(depth+1) + // tests reside one step deaper than its parent suite
-            '<td class="duration">'+ test.duration + ' ms</td>'+
+            '<td class="durationPorP">'+ test.duration + ' ms</td>'+
             '<td class="title">'+ test.title + '</td>' +
             '<td class="passedState">Passed</td>' +
           '</tr>'+
@@ -102,7 +114,7 @@ module.exports = function (runner) {
         tests += '<table cellspacing="0" cellpadding="0">'+
           '<tr class="'+parentReference+' pending" >' +
             addIndentation(depth+1) +
-            '<td class="duration">0 ms</td>'+
+            '<td class="durationPorP">0 ms</td>'+
             '<td class="title">'+ test.title + '</td>' +
             '<td class="pendingState">Pending</td>' +
           '</tr>'+

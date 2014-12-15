@@ -1,138 +1,162 @@
-<html>
-	<head>
-		<style type="text/css">
-			/* general */
-			body {
-				background-color: SeaShell
-			}
+<head>
+	<title>Test Report</title>
+	<style type="text/css">
+		/* general */
+		body {
+			background-color: SeaShell;
+			min-width: 1000px;
+		}
 
-			div {
-				margin-left: auto; 
-				margin-right: auto;
-				width: 80%;
-				border: 5px ridge #E3EAF2;
-			}
+		div#reportTable {
+			margin-left: auto; 
+			margin-right: auto;
+			width: 90%;
+			border: 5px ridge #E3EAF2;
+		}
+		
+		table {
+			width: 100%;
+			border-collapse: collapse;   
+			background-color: #E7EDF5; 
+			table-layout: fixed;
+		}
+		td {
+			border-left: 1px solid black;
+			border-bottom: 1px solid black;
+			word-break: break-word;
+		}
+
+		.expanded {
+			background-repeat: no-repeat;
+			width: 16;
+			height: 16;
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA9QTFRFeXl53d3dmpqasbGx////GU0iEgAAAAV0Uk5T/////wD7tg5TAAAAK0lEQVQI12NwgQIG0hhCDAwMTCJAhqMCA4MiWEoIJABiOCooQhULi5BqMgB2bh4svs8t+QAAAABJRU5ErkJggg==');
+		}
+
+		.collapsed {
+			background-repeat: no-repeat;
+			width: 16;
+			height: 16;
+			background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAPUExURXl5ed3d3ZqamrGxsf///xlNIhIAAAAFdFJOU/////8A+7YOUwAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAvSURBVBjTY3CBAlSGI4whBGU4KkAZQgwQhqMClOHMgC4CV4PQBTcHYbILFoaLCwCrIB7+CSEIHAAAAABJRU5ErkJggg==');
+		}
+
+		.indent {
+			width: 20px;
+		}
+
+		/* suite */
+		.suite {
+			border-bottom: 4px ridge gray;
+		}
+
+		.subTotal {
+			color: white;
+			text-align: left;
+			width: 80px;
+			font-weight: bold;
+		}
+
+
+		/* tests */
+		.title  {
+			width: auto;		
+		}
+
+		.duration {
+			width: 90px;
+		}
+
+		.durationPorP {
+			padding-left: 17px;
+			width: 90px;
+		}
+
+		.passedState, .failedState, .pendingState {
+			color: white;
+			text-align: center;
+			width: 60px; 
+		}
+
+		.passedState {
+			background-color: DarkGreen; 
+		}
+		.failedState { 
+			background-color: DarkRed;  
+		}
+		.pendingState { 
+			background-color: DarkBlue; 
+		}
+
+		.passed {
+			background-color: #7EDF9F;
+		}
+		.failed {
+			background-color: #E0A7A7;
+		}
+
+		.pending {
+			background-color: lightblue;
+		}
+
+		.failDetail {
+			width: auto; 
+			word-wrap: normal;
+		}
+
+		/* other */
+		.totalsLeft {
+			width: 200px;
+			height: 100px;
+			margin-left: 5%;
+			padding-top: 20px;
+			padding-left:5px;
+			font-weight: bold;
+			float:left;
+		}
+
+		.totalsRight {
+			text-align:center;
+			line-height: 50px;
+			color: white;
+			font-weight: bold;
 			
-			table {
-				width: 100%;
-				border-collapse: collapse;   
-				background-color: #E7EDF5; 
-				table-layout: fixed;
-			}
-			td {
-				border-left: 1px solid black;
-				border-bottom: 1px solid black;
-				word-break: break-word;
-			}
+			height: 50px;
+			margin-right: 5%;
+			margin-top: 20px;
+			padding-top: 20px;
+			float:right;
+		}
 
-			.expanded {
-				background-repeat: no-repeat;
-				width: 16;
-				height: 16;
-				background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA9QTFRFeXl53d3dmpqasbGx////GU0iEgAAAAV0Uk5T/////wD7tg5TAAAAK0lEQVQI12NwgQIG0hhCDAwMTCJAhqMCA4MiWEoIJABiOCooQhULi5BqMgB2bh4svs8t+QAAAABJRU5ErkJggg==');
-			}
+		.innerDiv {
+			border:none;
+		}
 
-			.collapsed {
-				background-repeat: no-repeat;
-				width: 16;
-				height: 16;
-				background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAPUExURXl5ed3d3ZqamrGxsf///xlNIhIAAAAFdFJOU/////8A+7YOUwAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAvSURBVBjTY3CBAlSGI4whBGU4KkAZQgwQhqMClOHMgC4CV4PQBTcHYbILFoaLCwCrIB7+CSEIHAAAAABJRU5ErkJggg==');
-			}
+	</style>
 
-			.indent {
-				width: 20px;
-			}
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+	<script>
+		var showHide = function(id,pid) { 
+			var element = $("."+id); 
+			var pelement = $("."+pid);
+			var imageTD = pelement.filter('#'+id).find('#image');
 
-			/* suite */
-			.suite {
-				border-bottom: 4px ridge gray;
-			}
-
-			.subTotal {
-				color: white;
-				text-align: left;
-				width: 80px;
-				font-weight: bold;
-			}
-
-
-			/* tests */
-			.title  {
-				width: auto;		
-			}
-
-			.duration {
-				width: 90px;
-			}
-
-			.passedState, .failedState, .pendingState {
-				color: white;
-				text-align: center;
-				width: 60px; 
-			}
-
-			.passedState {
-				background-color: DarkGreen; 
-			}
-			.failedState { 
-				background-color: DarkRed;  
-			}
-			.pendingState { 
-				background-color: #9A9A9A; 
-			}
-
-			.passed {
-				background-color: #7EDF9F;
-			}
-			.failed {
-				background-color: #E0A7A7;
-			}
-
-			.pending {
-				background-color: #DCDCDC
-			}
-
-			.failDetail {
-				width: auto; 
-				word-wrap: break-word;
-			}
-
-			/* other */
-			.endStyle {
-				text-align: center; 
-				background-color: #E7EDF5; 
-				width: 150px; 
-				margin-left: auto; 
-				margin-right: auto;
-			}
-		</style>
-
-		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-		<script>
-			var showHide = function(id,pid) { 
-				var element = $("."+id); 
-				var pelement = $("."+pid);
-				var imageTD = pelement.filter('#'+id).find('#image');
-
-				if (pelement.css("display") == "none") { 
-					element.toggle(false);
+			if (pelement.css("display") == "none") { 
+				element.toggle(false);
+				imageTD.attr('class', 'collapsed');
+				element.click(); 
+			} else { 
+				element.toggle();
+				if (element.css("display") == "none") {
 					imageTD.attr('class', 'collapsed');
-					element.click(); 
-				} else { 
-					element.toggle();
-					if (element.css("display") == "none") {
-						imageTD.attr('class', 'collapsed');
-						element.click();
-					} else {
-						imageTD.attr('class', 'expanded');
-					}
+					element.click();
+				} else {
+					imageTD.attr('class', 'expanded');
 				}
 			}
+		}
 
-			window.onload = function() {
-				$(".failed").click();
-			}
-		</script>
-	</head>
-	<body>
-		<div>
+		window.onload = function() {
+			$(".failed").click();
+		}
+	</script>
+</head>
