@@ -1,5 +1,6 @@
 var path = require('path');
 var fs = require('fs');
+var config = require('./config');
 
 var root = {};
 
@@ -11,13 +12,22 @@ module.exports = function (runner) {
     duration: 0
   };
 
-  runner.on('end', function() {
-    console.log('<html>'); // start doc
-    var value = fs.readFileSync(path.join(__dirname, 'docs/header.html'), "utf8"); // get header file
-    console.log(value); // write header
-    console.log('<body>'); // start body
+  runner.on('start', function(){
+    console.log('Mocha HTML Table Reporter v1.5.0\nNOTE: Tests sequence must complete to generate html report\n\n');
+  });
 
+  runner.on('end', function() {
+    var value = fs.readFileSync(path.join(__dirname, 'header.html'), "utf8"); // get header file
+    var doc = '<html>' + value + '<body>'; // start doc
+
+    var width = 695;
     var totalTests = status.pass+status.fail+status.pending;
+    var passWidth = ((status.pass / totalTests) * width).toFixed(0);
+    var failWidth = ((status.fail / totalTests) * width).toFixed(0);
+    var pendWidth = ((status.pending / totalTests) * width).toFixed(0);
+    var passPercent = ((status.pass / totalTests)*100).toFixed(0);
+    var failPercent = ((status.fail / totalTests)*100).toFixed(0);
+    var pendingPercent = ((status.pending / totalTests)*100).toFixed(0);
 
     var totals = '<div style="height:120px;"><div class="totalsLeft">'+
       '<div class="innerDiv" style="color: black">Run Time: ' + getTime(status.duration) + '</div>' +
@@ -26,23 +36,34 @@ module.exports = function (runner) {
       '<div class="innerDiv" style="color: DarkRed;">Failed: ' + status.fail + '</div>' +
       '<div class="innerDiv" style="color: DarkBlue;">Pending: ' + status.pending + '</div>' +
     '</div>';
-    console.log(totals);
-
-    var width = 695;
-    var passWidth = (status.pass / totalTests) * width;
-    var failWidth = (status.fail / totalTests) * width;
-    var pendWidth = (status.pending / totalTests) * width;
+    doc += totals;
 
     var percentages = '<div class="totalsRight" style="width: '+width+'px;">' +
-          '<div class="innerDiv" style="width:'+passWidth+'px; background-color: DarkGreen; height:50px; float:left;">'+((status.pass / totalTests)*100).toFixed(0)+'%</div>' +
-          '<div class="innerDiv" style="width:'+failWidth+'px; background-color: DarkRed; height:50px; float:left;">'+((status.fail / totalTests)*100).toFixed(0)+'%</div>' +
-          '<div class="innerDiv" style="width:'+pendWidth+'px; background-color: DarkBlue; height:50px; float:left;">'+((status.pending / totalTests)*100).toFixed(0)+'%</div>' +
+          '<div class="innerDiv" style="width:'+passWidth+'px; background-color: DarkGreen; height:50px; float:left;">'+passPercent+'%</div>' +
+          '<div class="innerDiv" style="width:'+failWidth+'px; background-color: DarkRed; height:50px; float:left;">'+failPercent+'%</div>' +
+          '<div class="innerDiv" style="width:'+pendWidth+'px; background-color: DarkBlue; height:50px; float:left;">'+pendingPercent+'%</div>' +
       '</div></div>';
-    console.log(percentages);
+    doc += percentages;
+    doc += '<div id="reportTable">' + displayHTML(root) + '</div></body></html>'; // compile tests and finish the doc
+    
+    var filePath;
+    if (config.filename != '') {
+      filePath = path.join(config.path, config.filename);
+    }
 
-    console.log('<div id="reportTable">'); // table div
-    displayHTML(root); // print table
-    console.log('</div></body></html>'); // close the report 
+    console.log('\n\n');
+    if (filePath) {
+      try {
+        fs.writeFileSync(filePath, doc, 'utf8'); // write out to report.html
+        console.log('Writing file to: '+ filePath);
+        console.log('To change the output directory or filename go to: ' + path.join(__dirname , 'config.js'));
+      } catch(err) {
+        console.log(err.message);
+      }
+    } else {
+      console.log('No file location and name was given');
+      console.log('To change the output directory or filename go to: ' + path.join(__dirname , 'config.js'));
+    }
   });
 
   runner.on('suite', function(suite) {
@@ -54,6 +75,9 @@ module.exports = function (runner) {
       object = object.parent;
     }
     suite.depth = depth;
+
+    if (!suite.root) console.log(textIndent(depth) + suite.title);
+
   });
 
   runner.on('suite end', function(suite) {
@@ -139,9 +163,30 @@ module.exports = function (runner) {
     suite.htmlDisplay = display;
   });
 
-  runner.on('fail', function(test, err){
-      test.err = err;
+  runner.on('pass', function(test){
+    var depth = test.parent.depth+1;
+    console.log(textIndent(depth)+'+ '+test.title);
   });
+
+  runner.on('pending', function(test){
+    var depth = test.parent.depth+1;
+    console.log(textIndent(depth)+'- '+test.title);
+  });
+
+  runner.on('fail', function(test, err){
+    test.err = err;
+    var depth = test.parent.depth+1;
+    console.log(textIndent(depth)+'x '+test.title);
+  });
+}
+
+var textIndent = function(indent) {
+  indent = indent-1;
+  var data = '';
+  for (var i=0; i<indent; i++) {
+    data += '  ';
+  }
+  return data;
 }
 
 var addIndentation = function(indent) {     
@@ -169,11 +214,13 @@ var removeSpecialChars = function(text) {
 }
 
 var displayHTML = function(suite) {
-  if (suite.htmlDisplay) console.log(suite.htmlDisplay);
-  if (suite.suites == undefined) return;
+  doc = '';
+  if (suite.htmlDisplay) doc += suite.htmlDisplay;
+  if (suite.suites == undefined) return doc;
   suite.suites.forEach(function(sub, index, array) {
-    displayHTML(sub);
+    doc += displayHTML(sub);
   });
+  return doc;
 }
 
 var generateResult = function(suite) {
