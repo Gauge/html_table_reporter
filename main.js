@@ -1,5 +1,6 @@
 var path = require('path');
 var fs = require('fs');
+var colors = require('chalk');
 var config = require('./config');
 
 var root = {};
@@ -13,7 +14,8 @@ module.exports = function (runner) {
   };
 
   runner.on('start', function(){
-    console.log('Mocha HTML Table Reporter v1.5.0\nNOTE: Tests sequence must complete to generate html report\n\n');
+    console.log('Mocha HTML Table Reporter v1.5.0\nNOTE: Tests sequence must complete to generate html report');
+    console.log("Run Mode: " + ((!config.silent)? "Standard": "Silent")+"\n\n") 
   });
 
   runner.on('end', function() {
@@ -76,7 +78,7 @@ module.exports = function (runner) {
     }
     suite.depth = depth;
 
-    if (!suite.root) console.log(textIndent(depth) + suite.title);
+    if (!suite.root && !config.silent) console.log(textIndent(depth) + suite.title);
 
   });
 
@@ -124,7 +126,7 @@ module.exports = function (runner) {
       } else if (state == 'passed') {
         status.pass++;
         status.duration += (test.duration != undefined) ? test.duration : 0;
-        tests += '<table cellspacing="0" cellpadding="0">'+
+        if (!config.silent) tests += '<table cellspacing="0" cellpadding="0">'+
           '<tr class="'+parentReference+' passed" >' +
             addIndentation(depth+1) + // tests reside one step deaper than its parent suite
             '<td class="durationPorP">'+ test.duration + ' ms</td>'+
@@ -135,7 +137,7 @@ module.exports = function (runner) {
 
       } else if (test.pending) {
         status.pending++;
-        tests += '<table cellspacing="0" cellpadding="0">'+
+       if (!config.silent) tests += '<table cellspacing="0" cellpadding="0">'+
           '<tr class="'+parentReference+' pending" >' +
             addIndentation(depth+1) +
             '<td class="durationPorP">0 ms</td>'+
@@ -165,18 +167,28 @@ module.exports = function (runner) {
 
   runner.on('pass', function(test){
     var depth = test.parent.depth+1;
-    console.log(textIndent(depth)+'+ '+test.title);
+    if (!config.silent){
+      var output = colors.green(textIndent(depth)+'√ '+test.title) + colors.gray(" <"+test.duration+">");
+      console.log(output);
+    }
   });
 
   runner.on('pending', function(test){
     var depth = test.parent.depth+1;
-    console.log(textIndent(depth)+'- '+test.title);
+    if(!config.silent) {
+      var output = colors.cyan(textIndent(depth)+'» '+test.title) + colors.gray(" <pending>");
+      console.log(output);
+    }
   });
 
   runner.on('fail', function(test, err){
     test.err = err;
     var depth = test.parent.depth+1;
-    console.log(textIndent(depth)+'x '+test.title);
+    var output = '';
+    if (config.silent) output += textIndent(depth-1) + test.parent.title +'\n';
+    output += colors.red(textIndent(depth)+'x '+test.title) + colors.gray(" <"+((test.duration)? test.duration : "NaN")+">");
+    if (config.silent) output +=  colors.gray('\n'+textIndent(depth+1) + test.err);
+    console.log(output);
   });
 }
 

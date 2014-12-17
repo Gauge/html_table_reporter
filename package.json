@@ -17,6 +17,9 @@
   "devDependencies": {
     "mocha": "1.6.x"
   },
+  "dependencies": {
+    "chalk": "latest"
+  },
   "engines": {
     "node": ">= 0.6.0"
   },

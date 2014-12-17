@@ -1,7 +1,7 @@
 var assert = require('assert');
 var Mocha = require('mocha');
-var Test = Mocha.Test
-var Suite = Mocha.Suite
+var Test  = Mocha.Test;
+var Suite = Mocha.Suite;
 
 var mocha = new Mocha({
     reporter: 'html_table_reporter',
@@ -10,16 +10,14 @@ var mocha = new Mocha({
     bail: false
 });
 
-var parentSuite = mocha.suite;
-
-var suite1 = Suite.create(parentSuite, 'HTML Test Suite');
+var suite1 = Suite.create(mocha.suite, 'HTML Test Suite');
 
 suite1.addTest(new Test('2 + 2 will equal 4', function() {
 	assert.equal(2+2, 4, '2+2 did not equal 4!');
 }));
 
-suite1.addTest(new Test('2*2 will equal 87', function() {
-	assert.equal(2*2, 87, '2*2 did not equals ' + 2*2 + ' not 87');
+suite1.addTest(new Test('4 will equal 87', function() {
+	assert.equal(4, 87, '4 did not equal 87');
 }));
 
 suite1.addTest(new Test('this is a pending test'));
@@ -53,7 +51,7 @@ suite4.addTest(new Test('inner fail', function(){
 	assert(false);
 }));
 
-var suite5 = Suite.create(parentSuite, 'Another Suite');
+var suite5 = Suite.create(mocha.suite, 'Another Suite');
 
 suite5.addTest(new Test('this tests is awesome', function () {
 	assert(true);
@@ -85,6 +83,6 @@ suite6.addTest(new Test('this tests is awesome', function () {
 	assert(true);
 }));
 
-var suite7 = Suite.create(parentSuite, 'This Suite Will Not Show Up');
+var suite7 = Suite.create(mocha.suite, 'This Suite Will Not Show Up');
 
 mocha.run();
