@@ -1,23 +1,26 @@
-|TODO											|Status   	|
-| --------------------------------------------- | --------- |
-|Display suites in hierarchy              		|Complete 	|
-|Display tests for each suite             		|Complete 	|
-|Display tests errors on fail             		|Complete 	|
-|Display test results                     		|Complete 	|
-|Display sub test results                 		|Complete 	|
-|Create collapable rows                   		|Complete 	|
-|Add Some super sweet graph or something  		|Complete	|
-|Make it easier to set the default output path 	|In Progress|
-|Add color and test duration to texutal report 	|In Progress|
+|TODO											    |Status   	|
+| ------------------------------------------------- | --------- |
+|Display suites in hierarchy              		    |Complete 	|
+|Display tests for each suite             		    |Complete 	|
+|Display tests errors on fail             		    |Complete 	|
+|Display final test results                         |Complete 	|
+|Display sub test results                 		    |Complete 	|
+|Create collapable rows                   		    |Complete 	|
+|Add a super sweet graph or something    		    |Complete	|
+|Make it easier to set the default output path 	    |In Progress|
+|Add color and test duration to texutal report 	    |Complete   |
 
 
 ## Basic install and use
-
 ```
 npm install html_table_reporter
 
 mocha -R html_table_reporter ./testpath
 ```
+
+### Modes
+    * silent (only outputs errors)
+
 
 ### Output Path
 
@@ -29,14 +32,11 @@ C:\workspace> mocha -R html_table_reporter ./test
 // output
 C:\workspace\report.html
 ```
-
 You can changed the path by going to `node_modules\html_table_reporter\config.js` and dictating a relative or full path (relative to the execution path)
 
 
-## Output
-
+### Output Types
 Step one generates genaric textual output to the command line:
-
 ```
 Mocha HTML Table Reporter v1.5.0
 NOTE: Tests sequence must complete to generate html report
@@ -44,12 +44,11 @@ NOTE: Tests sequence must complete to generate html report
 
 Basic Sanity Test
   Login
-    + navigate to energy center
+    + navigate to site
     + type email address
     + type password
     + click the login button
     + wait for login
-    + handle popups
   Logout
     + click the logout button
     + wait for login screen
