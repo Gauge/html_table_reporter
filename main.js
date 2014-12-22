@@ -27,9 +27,9 @@ module.exports = function (runner) {
     var passWidth = ((status.pass / totalTests) * width).toFixed(0);
     var failWidth = ((status.fail / totalTests) * width).toFixed(0);
     var pendWidth = ((status.pending / totalTests) * width).toFixed(0);
-    var passPercent = ((status.pass / totalTests)*100).toFixed(0);
-    var failPercent = ((status.fail / totalTests)*100).toFixed(0);
-    var pendingPercent = ((status.pending / totalTests)*100).toFixed(0);
+    var passPercent = Math.floor((status.pass / totalTests)*100).toFixed(0);
+    var failPercent = Math.floor((status.fail / totalTests)*100).toFixed(0);
+    var pendingPercent = Math.floor((status.pending / totalTests)*100).toFixed(0);
 
     var totals = '<div style="height:120px;"><div class="totalsLeft">'+
       '<div class="innerDiv" style="color: black">Run Time: ' + getTime(status.duration) + '</div>' +
@@ -77,6 +77,7 @@ module.exports = function (runner) {
       object = object.parent;
     }
     suite.depth = depth;
+    suite.guid = guid();
 
     if (!suite.root && !config.silent) console.log(textIndent(depth) + suite.title);
 
@@ -91,12 +92,11 @@ module.exports = function (runner) {
     var depth = suite.depth;
 
     var errorcount = 0;
-    var title = removeSpecialChars(suite.title);
-    var ptitle = removeSpecialChars(suite.parent.title);
+    var id = suite.guid;
+    var pid = suite.parent.guid;
 
     var tests = '';
     suite.tests.forEach(function(test, index, array) {
-      var parentReference = title+depth;
       var state = test.state
 
       if (state == 'failed') {
@@ -104,7 +104,7 @@ module.exports = function (runner) {
         errorcount++;
         status.duration += (test.duration != undefined) ? test.duration : 0;
         tests += '<table cellspacing="0" cellpadding="0">'+
-          '<tr id="'+parentReference+'err'+errorcount+'" onclick="showHide(\''+parentReference+'err'+errorcount+'\', \''+parentReference+'\')" class="'+parentReference+' failed">' +
+          '<tr id="'+id+'err'+errorcount+'" onclick="showHide(\''+id+'err'+errorcount+'\', \''+id+'\')" class="'+id+' failed">' +
             addIndentation(depth+1) + // tests reside one step deaper than its parent suite
             '<td id="image" class="expanded"></td>' +
             '<td class="duration">'+ test.duration + ' ms</td>'+
@@ -114,7 +114,7 @@ module.exports = function (runner) {
         '</table>';
 
         tests += '<table cellspacing="0" cellpadding="0">' +
-          '<tr class="'+parentReference+'err'+errorcount+' failed">' +
+          '<tr class="'+id+'err'+errorcount+' failed">' +
             addIndentation(depth+2) +
             '<td class="failDetail">'+
               '<pre style="font-family: \'Courier New\', Courier, monospace;">'+
@@ -127,7 +127,7 @@ module.exports = function (runner) {
         status.pass++;
         status.duration += (test.duration != undefined) ? test.duration : 0;
         if (!config.silent) tests += '<table cellspacing="0" cellpadding="0">'+
-          '<tr class="'+parentReference+' passed" >' +
+          '<tr class="'+id+' passed" >' +
             addIndentation(depth+1) + // tests reside one step deaper than its parent suite
             '<td class="durationPorP">'+ test.duration + ' ms</td>'+
             '<td class="title">'+ test.title + '</td>' +
@@ -138,7 +138,7 @@ module.exports = function (runner) {
       } else if (test.pending) {
         status.pending++;
        if (!config.silent) tests += '<table cellspacing="0" cellpadding="0">'+
-          '<tr class="'+parentReference+' pending" >' +
+          '<tr class="'+id+' pending" >' +
             addIndentation(depth+1) +
             '<td class="durationPorP">0 ms</td>'+
             '<td class="title">'+ test.title + '</td>' +
@@ -151,7 +151,7 @@ module.exports = function (runner) {
     var result = generateResult(suite);
     var display = '';
     display += '<table cellspacing="0" cellpadding="0">'+
-      '<tr id="'+title+depth+'" onclick="showHide(\''+title+depth+'\', \''+ptitle+(depth-1)+'\')" class="'+ptitle+(depth-1)+' suite">'+
+      '<tr id="'+id+'" onclick="showHide(\''+id+'\', \''+pid+'\')" class="'+pid+' suite">'+
         addIndentation(depth) +
         '<td id="image" class="expanded"></td>' +
         '<td class="title">'+ suite.title + '</td>' +
@@ -213,17 +213,18 @@ var addIndentation = function(indent) {
   return data;
 }
 
-var removeSpecialChars = function(text) {
-  var chars = '\.!?:;\,@#$%^&\*()+=[]{}\\\'\"\s<>/';
-
-  for (var i=0; i<chars.length; i++) {
-    var value = chars[i];
-    var re = new RegExp('\\'+value,'g');
-    text = text.replace(re, '');
+var guid = (function() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+               .toString(16)
+               .substring(1);
   }
+  return function() {
+    return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+           s4() + '-' + s4() + s4() + s4() + '-' + s4();
+  };
+})();
 
-  return text;
-}
 
 var displayHTML = function(suite) {
   doc = '';
