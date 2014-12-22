@@ -1,0 +1,111 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'publish',
+1 verbose cli   './' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.32
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 verbose publish [ './' ]
+6 verbose cache add [ './', null ]
+7 verbose cache add name=undefined spec="./" args=["./",null]
+8 verbose parsed url { protocol: null,
+8 verbose parsed url   slashes: null,
+8 verbose parsed url   auth: null,
+8 verbose parsed url   host: null,
+8 verbose parsed url   port: null,
+8 verbose parsed url   hostname: null,
+8 verbose parsed url   hash: null,
+8 verbose parsed url   search: null,
+8 verbose parsed url   query: null,
+8 verbose parsed url   pathname: './',
+8 verbose parsed url   path: './',
+8 verbose parsed url   href: './' }
+9 silly lockFile 0ee6c175- ./
+10 verbose lock ./ C:\Users\ben\AppData\Roaming\npm-cache\0ee6c175-.lock
+11 verbose tar pack [ 'C:\\Users\\ben\\AppData\\Roaming\\npm-cache\\html_table_reporter\\1.6.1\\package.tgz',
+11 verbose tar pack   './' ]
+12 verbose tarball C:\Users\ben\AppData\Roaming\npm-cache\html_table_reporter\1.6.1\package.tgz
+13 verbose folder ./
+14 info prepublish html_table_reporter@1.6.1
+15 silly lockFile 04cb2bca-tar tar://./
+16 verbose lock tar://./ C:\Users\ben\AppData\Roaming\npm-cache\04cb2bca-tar.lock
+17 silly lockFile 3f010484-table-reporter-1-6-1-package-tgz tar://C:\Users\ben\AppData\Roaming\npm-cache\html_table_reporter\1.6.1\package.tgz
+18 verbose lock tar://C:\Users\ben\AppData\Roaming\npm-cache\html_table_reporter\1.6.1\package.tgz C:\Users\ben\AppData\Roaming\npm-cache\3f010484-table-reporter-1-6-1-package-tgz.lock
+19 silly lockFile 04cb2bca-tar tar://./
+20 silly lockFile 04cb2bca-tar tar://./
+21 silly lockFile 3f010484-table-reporter-1-6-1-package-tgz tar://C:\Users\ben\AppData\Roaming\npm-cache\html_table_reporter\1.6.1\package.tgz
+22 silly lockFile 3f010484-table-reporter-1-6-1-package-tgz tar://C:\Users\ben\AppData\Roaming\npm-cache\html_table_reporter\1.6.1\package.tgz
+23 silly lockFile c219a302-tml-table-reporter-1-6-1-package C:\Users\ben\AppData\Roaming\npm-cache\html_table_reporter\1.6.1\package
+24 verbose lock C:\Users\ben\AppData\Roaming\npm-cache\html_table_reporter\1.6.1\package C:\Users\ben\AppData\Roaming\npm-cache\c219a302-tml-table-reporter-1-6-1-package.lock
+25 silly lockFile c219a302-tml-table-reporter-1-6-1-package C:\Users\ben\AppData\Roaming\npm-cache\html_table_reporter\1.6.1\package
+26 silly lockFile c219a302-tml-table-reporter-1-6-1-package C:\Users\ben\AppData\Roaming\npm-cache\html_table_reporter\1.6.1\package
+27 silly lockFile 0ee6c175- ./
+28 silly lockFile 0ee6c175- ./
+29 silly publish { name: 'html_table_reporter',
+29 silly publish   version: '1.6.1',
+29 silly publish   description: 'A visually appealing html reporter for mocha',
+29 silly publish   keywords: [ 'mocha', 'reporter', 'html', 'visual', 'selenium' ],
+29 silly publish   author: { name: 'Gauge', email: 'Gauger16@gmail.com' },
+29 silly publish   main: 'main.js',
+29 silly publish   devDependencies: { mocha: '1.6.x' },
+29 silly publish   dependencies: { chalk: 'latest' },
+29 silly publish   engines: { node: '>= 0.6.0' },
+29 silly publish   repository:
+29 silly publish    { type: 'git',
+29 silly publish      url: 'https://github.com/Gauge/html_table_reporter.git' },
+29 silly publish   readme: '|TODO\t\t\t\t\t\t\t\t\t\t\t    |Status   \t|\r\n| ------------------------------------------------- | --------- |\r\n|Display suites in hierarchy              \t\t    |Complete \t|\r\n|Display tests for each suite             \t\t    |Complete \t|\r\n|Display tests errors on fail             \t\t    |Complete \t|\r\n|Display final test results                         |Complete \t|\r\n|Display sub test results                 \t\t    |Complete \t|\r\n|Create collapable rows                   \t\t    |Complete \t|\r\n|Add a super sweet graph or something    \t\t    |Complete\t|\r\n|Make it easier to set the default output path \t    |In Progress|\r\n|Add color and test duration to texutal report \t    |Complete   |\r\n\r\n\r\n## Basic install and use\r\n```\r\nnpm install html_table_reporter\r\n\r\nmocha -R html_table_reporter ./testpath\r\n```\r\n\r\n### Modes\r\n    * silent (only outputs errors)\r\n\r\n\r\n### Output Path\r\n\r\nBy defult the path is set to the execution folder and will kick out a file called report.html\r\n```\r\n// execution folder\r\nC:\\workspace> mocha -R html_table_reporter ./test\r\n\r\n// output\r\nC:\\workspace\\report.html\r\n```\r\nYou can changed the path by going to `node_modules\\html_table_reporter\\config.js` and dictating a relative or full path (relative to the execution path)\r\n\r\n\r\n### Output Types\r\nStep one generates genaric textual output to the command line:\r\n```\r\nMocha HTML Table Reporter v1.6.2\r\nNOTE: Tests sequence must complete to generate html report\r\n\r\n\r\nBasic Sanity Test\r\n  Login\r\n    + navigate to site\r\n    + type email address\r\n    + type password\r\n    + click the login button\r\n    + wait for login\r\n  Logout\r\n    + click the logout button\r\n    + wait for login screen\r\n\r\n\r\n\r\nWriting file to: report.html\r\nTo change the output directory or filename go to: C:\\workspace\\node_modules\\html_table_reporter\\config.js\r\n\r\n```\r\n\r\nStep two generates an html document:\r\n\r\n![](http://i1343.photobucket.com/albums/o790/Benjamin_Pratt/Untitled_zpsfd5ab49c.png)\r\n',
+29 silly publish   readmeFilename: 'Readme.md',
+29 silly publish   gitHead: 'f871ee886abfd2740971286bee600da0bb719f73',
+29 silly publish   bugs: { url: 'https://github.com/Gauge/html_table_reporter/issues' },
+29 silly publish   homepage: 'https://github.com/Gauge/html_table_reporter',
+29 silly publish   _id: 'html_table_reporter@1.6.1',
+29 silly publish   scripts: {},
+29 silly publish   _shasum: '9cac2d80d252a43c168c9977a2a2ad037fd6bff2',
+29 silly publish   _from: './' }
+30 verbose request where is /html_table_reporter
+31 verbose request registry https://registry.npmjs.org/
+32 verbose request id d5835fa7237347f6
+33 verbose url raw /html_table_reporter
+34 verbose url resolving [ 'https://registry.npmjs.org/', './html_table_reporter' ]
+35 verbose url resolved https://registry.npmjs.org/html_table_reporter
+36 verbose request where is https://registry.npmjs.org/html_table_reporter
+37 info trying registry request attempt 1 at 14:41:18
+38 http PUT https://registry.npmjs.org/html_table_reporter
+39 http 403 https://registry.npmjs.org/html_table_reporter
+40 verbose headers { date: 'Mon, 22 Dec 2014 22:38:20 GMT',
+40 verbose headers   server: 'CouchDB/1.5.0 (Erlang OTP/R16B03)',
+40 verbose headers   'content-type': 'application/json',
+40 verbose headers   'cache-control': 'max-age=60',
+40 verbose headers   'content-length': '5337',
+40 verbose headers   'accept-ranges': 'bytes',
+40 verbose headers   via: '1.1 varnish',
+40 verbose headers   'x-served-by': 'cache-sjc3134-SJC',
+40 verbose headers   'x-cache': 'MISS',
+40 verbose headers   'x-cache-hits': '0',
+40 verbose headers   'x-timer': 'S1419287900.396549,VS0,VE149',
+40 verbose headers   'keep-alive': 'timeout=10, max=50',
+40 verbose headers   connection: 'Keep-Alive' }
+41 error publish Failed PUT 403
+42 error Error: forbidden cannot modify pre-existing version: 1.6.1
+42 error old={"name":"html_table_reporter","version":"1.6.1","description":"A visually appealing html reporter for mocha","keywords":["mocha","reporter","html","visual","selenium"],"author":{"name":"Gauge","email":"Gauger16@gmail.com"},"main":"main.js","devDependencies":{"mocha":"1.6.x"},"dependencies":{"chalk":"latest"},"engines":{"node":">= 0.6.0"},"repository":{"type":"git","url":"https://github.com/Gauge/html_table_reporter.git"},"gitHead":"496e3ce5f2907e1eb62102ec1f71d349025f16b6","bugs":{"url":"https://github.com/Gauge/html_table_reporter/issues"},"homepage":"https://github.com/Gauge/html_table_reporter","_id":"html_table_reporter@1.6.1","scripts":{},"_shasum":"9fd819c49888ca03f18858399a3f6335d5111d1e","_from":"./","_npmVersion":"1.4.28","_npmUser":{"name":"gauge","email":"Gauger16@gmail.com"},"maintainers":[{"name":"gauge","email":"Gauger16@gmail.com"}],"dist":{"shasum":"9fd819c49888ca03f18858399a3f6335d5111d1e","tarball":"http://registry.npmjs.org/html_table_reporter/-/html_table_reporter-1.6.1.tgz"}}
+42 error new={"name":"html_table_reporter","version":"1.6.1","description":"A visually appealing html reporter for mocha","keywords":["mocha","reporter","html","visual","selenium"],"author":{"name":"Gauge","email":"Gauger16@gmail.com"},"main":"main.js","devDependencies":{"mocha":"1.6.x"},"dependencies":{"chalk":"latest"},"engines":{"node":">= 0.6.0"},"repository":{"type":"git","url":"https://github.com/Gauge/html_table_reporter.git"},"readme":"|TODO\u0009\u0009\u0009\u0009\u0009\u0009\u0009\u0009\u0009\u0009\u0009    |Status   \u0009|\u000d\u000a| ------------------------------------------------- | --------- |\u000d\u000a|Display suites in hierarchy              \u0009\u0009    |Complete \u0009|\u000d\u000a|Display tests for each suite             \u0009\u0009    |Complete \u0009|\u000d\u000a|Display tests errors on fail             \u0009\u0009    |Complete \u0009|\u000d\u000a|Display final test results                         |Complete \u0009|\u000d\u000a|Display sub test results                 \u0009\u0009    |Complete \u0009|\u000d\u000a|Create collapable rows                   \u0009\u0009    |Complete \u0009|\u000d\u000a|Add a super sweet graph or something    \u0009\u0009    |Complete\u0009|\u000d\u000a|Make it easier to set the default output path \u0009    |In Progress|\u000d\u000a|Add color and test duration to texutal report \u0009    |Complete   |\u000d\u000a\u000d\u000a\u000d\u000a## Basic install and use\u000d\u000a```\u000d\u000anpm install html_table_reporter\u000d\u000a\u000d\u000amocha -R html_table_reporter ./testpath\u000d\u000a```\u000d\u000a\u000d\u000a### Modes\u000d\u000a    * silent (only outputs errors)\u000d\u000a\u000d\u000a\u000d\u000a### Output Path\u000d\u000a\u000d\u000aBy defult the path is set to the execution folder and will kick out a file called report.html\u000d\u000a```\u000d\u000a// execution folder\u000d\u000aC:\\workspace> mocha -R html_table_reporter ./test\u000d\u000a\u000d\u000a// output\u000d\u000aC:\\workspace\\report.html\u000d\u000a```\u000d\u000aYou can changed the path by going to `node_modules\\html_table_reporter\\config.js` and dictating a relative or full path (relative to the execution path)\u000d\u000a\u000d\u000a\u000d\u000a### Output Types\u000d\u000aStep one generates genaric textual output to the command line:\u000d\u000a```\u000d\u000aMocha HTML Table Reporter v1.6.2\u000d\u000aNOTE: Tests sequence must complete to generate html report\u000d\u000a\u000d\u000a\u000d\u000aBasic Sanity Test\u000d\u000a  Login\u000d\u000a    + navigate to site\u000d\u000a    + type email address\u000d\u000a    + type password\u000d\u000a    + click the login button\u000d\u000a    + wait for login\u000d\u000a  Logout\u000d\u000a    + click the logout button\u000d\u000a    + wait for login screen\u000d\u000a\u000d\u000a\u000d\u000a\u000d\u000aWriting file to: report.html\u000d\u000aTo change the output directory or filename go to: C:\\workspace\\node_modules\\html_table_reporter\\config.js\u000d\u000a\u000d\u000a```\u000d\u000a\u000d\u000aStep two generates an html document:\u000d\u000a\u000d\u000a![](http://i1343.photobucket.com/albums/o790/Benjamin_Pratt/Untitled_zpsfd5ab49c.png)\u000d\u000a","readmeFilename":"Readme.md","gitHead":"f871ee886abfd2740971286bee600da0bb719f73","bugs":{"url":"https://github.com/Gauge/html_table_reporter/issues"},"homepage":"https://github.com/Gauge/html_table_reporter","_id":"html_table_reporter@1.6.1","scripts":{},"_shasum":"9cac2d80d252a43c168c9977a2a2ad037fd6bff2","_from":"./","_npmVersion":"1.4.28","_npmUser":{"name":"gauge","email":"Gauger16@gmail.com"},"maintainers":[{"name":"gauge","email":"Gauger16@gmail.com"}],"dist":{"shasum":"9cac2d80d252a43c168c9977a2a2ad037fd6bff2","tarball":"http://registry.npmjs.org/html_table_reporter/-/html_table_reporter-1.6.1.tgz"}}: html_table_reporter
+42 error     at RegClient.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:308:14)
+42 error     at Request._callback (C:\Program Files\nodejs\node_modules\npm\node_modules\npm-registry-client\lib\request.js:246:65)
+42 error     at Request.self.callback (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:236:22)
+42 error     at Request.emit (events.js:98:17)
+42 error     at Request.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:1142:14)
+42 error     at Request.emit (events.js:117:20)
+42 error     at IncomingMessage.<anonymous> (C:\Program Files\nodejs\node_modules\npm\node_modules\request\request.js:1096:12)
+42 error     at IncomingMessage.emit (events.js:117:20)
+42 error     at _stream_readable.js:943:16
+42 error     at process._tickCallback (node.js:419:13)
+43 error If you need help, you may report this *entire* log,
+43 error including the npm and node versions, at:
+43 error     <http://github.com/npm/npm/issues>
+44 error System Windows_NT 6.1.7601
+45 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "publish" "./"
+46 error cwd C:\workspace\node_modules\html_table_reporter
+47 error node -v v0.10.32
+48 error npm -v 1.4.28
+49 verbose exit [ 1, true ]

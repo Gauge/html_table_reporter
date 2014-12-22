@@ -14,7 +14,7 @@ module.exports = function (runner) {
   };
 
   runner.on('start', function(){
-    console.log('Mocha HTML Table Reporter v1.6.1\nNOTE: Tests sequence must complete to generate html report');
+    console.log('Mocha HTML Table Reporter v1.6.2\nNOTE: Tests sequence must complete to generate html report');
     console.log("Run Mode: " + ((!config.silent)? "Standard": "Silent")+"\n");
   });
 
