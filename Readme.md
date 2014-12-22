@@ -38,7 +38,7 @@ You can changed the path by going to `node_modules\html_table_reporter\config.js
 ### Output Types
 Step one generates genaric textual output to the command line:
 ```
-Mocha HTML Table Reporter v1.5.0
+Mocha HTML Table Reporter v1.6.1
 NOTE: Tests sequence must complete to generate html report
 
 

@@ -14,8 +14,8 @@ module.exports = function (runner) {
   };
 
   runner.on('start', function(){
-    console.log('Mocha HTML Table Reporter v1.5.0\nNOTE: Tests sequence must complete to generate html report');
-    console.log("Run Mode: " + ((!config.silent)? "Standard": "Silent")+"\n\n") 
+    console.log('Mocha HTML Table Reporter v1.6.1\nNOTE: Tests sequence must complete to generate html report');
+    console.log("Run Mode: " + ((!config.silent)? "Standard": "Silent")+"\n");
   });
 
   runner.on('end', function() {
@@ -53,7 +53,7 @@ module.exports = function (runner) {
       filePath = path.join(config.path, config.filename);
     }
 
-    console.log('\n\n');
+    console.log('\n');
     if (filePath) {
       try {
         fs.writeFileSync(filePath, doc, 'utf8'); // write out to report.html
@@ -214,7 +214,7 @@ var addIndentation = function(indent) {
 }
 
 var removeSpecialChars = function(text) {
-  var chars = '\.!@#$%^&\*()+=[]{}\\\'\"\s<>/';
+  var chars = '\.!?:;\,@#$%^&\*()+=[]{}\\\'\"\s<>/';
 
   for (var i=0; i<chars.length; i++) {
     var value = chars[i];
