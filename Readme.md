@@ -1,15 +1,4 @@
-|TODO											    |Status   	|
-| ------------------------------------------------- | --------- |
-|Display suites in hierarchy              		    |Complete 	|
-|Display tests for each suite             		    |Complete 	|
-|Display tests errors on fail             		    |Complete 	|
-|Display final test results                         |Complete 	|
-|Display sub test results                 		    |Complete 	|
-|Create collapable rows                   		    |Complete 	|
-|Add a super sweet graph or something    		    |Complete	|
-|Make it easier to set the default output path 	    |In Progress|
-|Add color and test duration to texutal report 	    |Complete   |
-
+![](http://i1343.photobucket.com/albums/o790/Benjamin_Pratt/Untitled_zpsfd5ab49c.png)
 
 ## Basic install and use
 ```
@@ -19,47 +8,67 @@ mocha -R html_table_reporter ./testpath
 ```
 
 ### Modes
-    * silent (only outputs errors)
 
+    You can change the modes in the config file `node_modules/html_table_reporter/config.js`.
+
+    * Compact (Shows every test without detail)
+    
+        ```
+            Login
+                √ navigate to site <2180>
+                √ type email address <160>
+                √ type password <70>
+                √ click the login button <80>
+                √ wait for login <663>
+                x handle popups <9>
+        ```
+
+    * Silent  (Shows errors only)
+
+        ```
+            x handle popups <9>
+                Blah Blah error message/stacktrace printout of death
+        ```
+
+    * Verbose (Shows every test in detail)
+
+        ```
+            Login
+                √ navigate to site <2180>
+                √ type email address <160>
+                    Something a user has logged. This will be grey
+            contrasting the basic green and red text.
+
+            I am currently in the process of fixing indentation 
+                √ type password <70>
+                √ click the login button <80>
+                √ wait for login <663>
+                x handle popups <9>
+                    Blah Blah error message/stacktrace printout of death
+        ```
+
+
+### Additional Logging
+
+    I have claimed the variable name `log` from the mochas context object. The log element is of type string and
+    is displayed after the its test passes.
+
+    ```
+      describe('Login', function(){
+        it('type email address', function(){
+            this.log = 'Something a user has logged.\n\nI am currently in the process of fixing indentation'
+        })
+      })
+    ```
 
 ### Output Path
 
 By defult the path is set to the execution folder and will kick out a file called report.html
 ```
 // execution folder
-C:\workspace> mocha -R html_table_reporter ./test
+~\workspace> mocha -R html_table_reporter ./test
 
 // output
-C:\workspace\report.html
+~\workspace\report.html
 ```
 You can changed the path by going to `node_modules\html_table_reporter\config.js` and dictating a relative or full path (relative to the execution path)
-
-
-### Output Types
-Step one generates genaric textual output to the command line:
-```
-Mocha HTML Table Reporter v1.6.2
-NOTE: Tests sequence must complete to generate html report
-
-
-Basic Sanity Test
-  Login
-    + navigate to site
-    + type email address
-    + type password
-    + click the login button
-    + wait for login
-  Logout
-    + click the logout button
-    + wait for login screen
-
-
-
-Writing file to: report.html
-To change the output directory or filename go to: C:\workspace\node_modules\html_table_reporter\config.js
-
-```
-
-Step two generates an html document:
-
-![](http://i1343.photobucket.com/albums/o790/Benjamin_Pratt/Untitled_zpsfd5ab49c.png)
