@@ -1,5 +1,5 @@
 {
-  "name": "html-table-reporter",
+  "name": "good-mocha-html-reporter",
   "version": "1.6.3",
   "description": "A visually appealing html reporter for mocha",
   "keywords": [
