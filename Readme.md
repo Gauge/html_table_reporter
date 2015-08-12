@@ -7,6 +7,20 @@ npm install html_table_reporter
 mocha -R html_table_reporter ./testpath
 ```
 
+```
+mocha_config: {
+    reporter: 'good-mocha-html-reporter', //good-mocha-html-reporter, spec, nyan
+    timeout: 15000,
+    bail: false,
+    savePath: '', // the path to desired location
+    filename: 'report.html', // filename gets attached at the end of savePath
+    mode: 'Verbose'
+}
+
+var mocha = new Mocha(mocha_config);
+```
+
+
 ### Modes
 
 You can change the modes in the config file `node_modules/html_table_reporter/config.js`.
@@ -73,4 +87,16 @@ By defult the path is set to the execution folder and will kick out a file calle
 // output
 ~\workspace\report.html
 ```
-You can changed the path by going to `node_modules\html_table_reporter\config.js` and dictating a relative or full path (relative to the execution path)
+
+```
+mocha_config: {
+    reporter: 'good-mocha-html-reporter', //good-mocha-html-reporter, spec, nyan
+    timeout: 15000,
+    bail: false,
+    savePath: '', // the path to desired location
+    filename: 'report.html', // filename gets attached at the end of savePath
+    mode: 'Verbose'
+}
+
+var mocha = new Mocha(mocha_config);
+```

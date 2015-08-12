@@ -1,11 +1,34 @@
 var path = require('path');
 var fs = require('fs');
 var colors = require('chalk');
-var config = require('./config');
 
 var root = {};
 
-module.exports = function(runner) {
+var COMPACT = "Compact",
+    VERBOSE = "Verbose",
+    SILENT = "Silent",
+    HTML_OUT = "HTML";
+
+var config = {
+    /*
+        Modes: COMPACT, VERBOSE, SILENT
+
+        COMPACT: Displays passed in compact and errors in compact
+        VERBOSE: Displays passed with detail and errors with detail
+        SILENT: Displays only errors with detail
+
+    */
+    path: '', // full or relative path (relative to your execution folder)
+    filename: 'report.html',
+    mode: 'Verbose'
+};
+
+module.exports = function(runner, options) {
+
+    config.path = options.savePath || config.path;
+    config.filename = options.filename || config.filename;
+    config.mode = options.mode || config.mode;
+
     var status = {
         pass: 0,
         fail: 0,
@@ -14,8 +37,8 @@ module.exports = function(runner) {
     };
 
     runner.on('start', function() {
-        if (config.mode != config.HTML_OUT) {
-            console.log('Mocha HTML Table Reporter v1.6.4\nNOTE: Tests sequence must complete to generate html report');
+        if (config.mode != HTML_OUT) {
+            console.log('Mocha HTML Table Reporter v1.6.5\nNOTE: Tests sequence must complete to generate html report');
             console.log("Run Mode: " + config.mode + "\n");
         }
     });
@@ -51,9 +74,9 @@ module.exports = function(runner) {
         doc += percentages;
         doc += '<div id="reportTable">' + displayHTML(root) + '</div></body></html>'; // compile tests and finish the doc
 
-        if (config.mode == config.HTML_OUT) console.log(doc);
+        if (config.mode == HTML_OUT) console.log(doc);
 
-        if (config.mode != config.HTML_OUT) {
+        if (config.mode != HTML_OUT) {
             var filePath;
             if (config.filename != '') {
                 filePath = path.join(config.path, config.filename);
@@ -65,13 +88,11 @@ module.exports = function(runner) {
                 try {
                     fs.writeFileSync(filePath, doc, 'utf8'); // write out to report.html
                     console.log('Writing file to: ' + filePath);
-                    console.log('To change the output directory or filename go to: ' + path.join(__dirname, 'config.js'));
                 } catch (err) {
                     console.log(err.message);
                 }
             } else {
                 console.log('No file location and name was given');
-                console.log('To change the output directory or filename go to: ' + path.join(__dirname, 'config.js'));
             }
         }
     });
@@ -87,7 +108,7 @@ module.exports = function(runner) {
         suite.depth = depth;
         suite.guid = guid();
 
-        if (!suite.root && config.mode != config.SILENT && config.mode != config.HTML_OUT) console.log(textIndent(depth) + suite.title);
+        if (!suite.root && config.mode != SILENT && config.mode != HTML_OUT) console.log(textIndent(depth) + suite.title);
 
     });
 
@@ -132,9 +153,9 @@ module.exports = function(runner) {
             } else if (state == 'passed') {
                 status.pass++;
                 status.duration += (test.duration != undefined) ? test.duration : 0;
-                if (config.mode == config.SILENT) return; // if running silent mode dont print anything
+                if (config.mode == SILENT) return; // if running silent mode dont print anything
                 
-                if (config.mode == config.VERBOSE && test.log != undefined) {
+                if (config.mode == VERBOSE && test.log != undefined) {
 
                      tests += '<table cellspacing="0" cellpadding="0">' +
                         '<tr id="' + id + 'pass' + status.pass + '" onclick="showHide(\'' + id + 'pass' + status.pass + '\', \'' + id + '\')" class="' + id + ' passed passlog">' +
@@ -170,7 +191,7 @@ module.exports = function(runner) {
 
             } else if (test.pending) {
                 status.pending++;
-                if (config.mode != config.SILENT) {
+                if (config.mode != SILENT) {
                     tests += '<table cellspacing="0" cellpadding="0">' +
                         '<tr class="' + id + ' pending" >' +
                         addIndentation(depth + 1) +
@@ -202,12 +223,12 @@ module.exports = function(runner) {
 
     runner.on('pass', function(test) {
         var depth = test.parent.depth + 1;
-        if (config.mode != config.SILENT && config.mode != config.HTML_OUT) {
+        if (config.mode != SILENT && config.mode != HTML_OUT) {
             var output = colors.green(textIndent(depth) + '√ ' + test.title) + colors.gray(" <" + test.duration + ">");
             console.log(output);
         }
 
-        if (config.mode == config.VERBOSE && test.ctx.log != undefined) {
+        if (config.mode == VERBOSE && test.ctx.log != undefined) {
             test.log = test.ctx.log;
             test.ctx.log = undefined;
             var output = colors.grey(textIndent(depth+1) + test.log);
@@ -217,7 +238,7 @@ module.exports = function(runner) {
 
     runner.on('pending', function(test) {
         var depth = test.parent.depth + 1;
-        if (config.mode != config.SILENT && config.mode != config.HTML_OUT) {
+        if (config.mode != SILENT && config.mode != HTML_OUT) {
             var output = colors.cyan(textIndent(depth) + '» ' + test.title) + colors.gray(" <pending>");
             console.log(output);
         }
@@ -227,14 +248,14 @@ module.exports = function(runner) {
         test.err = err;
         var depth = test.parent.depth + 1;
         var output = '';
-        if (config.mode != config.HTML_OUT) {
+        if (config.mode != HTML_OUT) {
 
-            if (config.mode == config.SILENT)
+            if (config.mode == SILENT)
                 output += textIndent(depth - 1) + test.parent.title + '\n';
             
             output += colors.red(textIndent(depth) + 'x ' + test.title) + colors.gray(" <" + ((test.duration) ? test.duration : "NaN") + ">");
             
-            if (config.mode == config.SILENT || config.mode == config.VERBOSE) 
+            if (config.mode == SILENT || config.mode == VERBOSE) 
                 output += colors.gray('\n' + textIndent(depth + 1) + test.err);
             
             console.log(output);

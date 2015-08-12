@@ -1,6 +1,6 @@
 {
   "name": "good-mocha-html-reporter",
-  "version": "1.6.4",
+  "version": "1.6.5",
   "description": "A visually appealing html reporter for mocha",
   "keywords": [
     "mocha",
@@ -26,5 +26,4 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Gauge/html_table_reporter.git"
-  }
 }
