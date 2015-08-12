@@ -13,5 +13,7 @@ module.exports = {
 	COMPACT: "Compact",
 	VERBOSE: "Verbose",
 	SILENT: "Silent",
+	HTML_OUT: "HTML",
+
 	mode: "Verbose"
 };

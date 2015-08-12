@@ -14,8 +14,10 @@ module.exports = function(runner) {
     };
 
     runner.on('start', function() {
-        console.log('Mocha HTML Table Reporter v1.6.3\nNOTE: Tests sequence must complete to generate html report');
-        console.log("Run Mode: " + config.mode + "\n");
+        if (config.mode != config.HTML_OUT) {
+            console.log('Mocha HTML Table Reporter v1.6.4\nNOTE: Tests sequence must complete to generate html report');
+            console.log("Run Mode: " + config.mode + "\n");
+        }
     });
 
     runner.on('end', function() {
@@ -49,23 +51,28 @@ module.exports = function(runner) {
         doc += percentages;
         doc += '<div id="reportTable">' + displayHTML(root) + '</div></body></html>'; // compile tests and finish the doc
 
-        var filePath;
-        if (config.filename != '') {
-            filePath = path.join(config.path, config.filename);
-        }
+        if (config.mode == config.HTML_OUT) console.log(doc);
 
-        console.log('\n');
-        if (filePath) {
-            try {
-                fs.writeFileSync(filePath, doc, 'utf8'); // write out to report.html
-                console.log('Writing file to: ' + filePath);
-                console.log('To change the output directory or filename go to: ' + path.join(__dirname, 'config.js'));
-            } catch (err) {
-                console.log(err.message);
+        if (config.mode != config.HTML_OUT) {
+            var filePath;
+            if (config.filename != '') {
+                filePath = path.join(config.path, config.filename);
             }
-        } else {
-            console.log('No file location and name was given');
-            console.log('To change the output directory or filename go to: ' + path.join(__dirname, 'config.js'));
+
+            console.log('\n');
+
+            if (filePath) {
+                try {
+                    fs.writeFileSync(filePath, doc, 'utf8'); // write out to report.html
+                    console.log('Writing file to: ' + filePath);
+                    console.log('To change the output directory or filename go to: ' + path.join(__dirname, 'config.js'));
+                } catch (err) {
+                    console.log(err.message);
+                }
+            } else {
+                console.log('No file location and name was given');
+                console.log('To change the output directory or filename go to: ' + path.join(__dirname, 'config.js'));
+            }
         }
     });
 
@@ -80,7 +87,7 @@ module.exports = function(runner) {
         suite.depth = depth;
         suite.guid = guid();
 
-        if (!suite.root && config.mode != config.SILENT) console.log(textIndent(depth) + suite.title);
+        if (!suite.root && config.mode != config.SILENT && config.mode != config.HTML_OUT) console.log(textIndent(depth) + suite.title);
 
     });
 
@@ -195,7 +202,7 @@ module.exports = function(runner) {
 
     runner.on('pass', function(test) {
         var depth = test.parent.depth + 1;
-        if (config.mode != config.SILENT) {
+        if (config.mode != config.SILENT && config.mode != config.HTML_OUT) {
             var output = colors.green(textIndent(depth) + '√ ' + test.title) + colors.gray(" <" + test.duration + ">");
             console.log(output);
         }
@@ -210,7 +217,7 @@ module.exports = function(runner) {
 
     runner.on('pending', function(test) {
         var depth = test.parent.depth + 1;
-        if (config.mode != config.SILENT) {
+        if (config.mode != config.SILENT && config.mode != config.HTML_OUT) {
             var output = colors.cyan(textIndent(depth) + '» ' + test.title) + colors.gray(" <pending>");
             console.log(output);
         }
@@ -220,10 +227,18 @@ module.exports = function(runner) {
         test.err = err;
         var depth = test.parent.depth + 1;
         var output = '';
-        if (config.mode == config.SILENT) output += textIndent(depth - 1) + test.parent.title + '\n';
-        output += colors.red(textIndent(depth) + 'x ' + test.title) + colors.gray(" <" + ((test.duration) ? test.duration : "NaN") + ">");
-        if (config.mode == config.SILENT || config.mode == config.VERBOSE) output += colors.gray('\n' + textIndent(depth + 1) + test.err);
-        console.log(output);
+        if (config.mode != config.HTML_OUT) {
+
+            if (config.mode == config.SILENT)
+                output += textIndent(depth - 1) + test.parent.title + '\n';
+            
+            output += colors.red(textIndent(depth) + 'x ' + test.title) + colors.gray(" <" + ((test.duration) ? test.duration : "NaN") + ">");
+            
+            if (config.mode == config.SILENT || config.mode == config.VERBOSE) 
+                output += colors.gray('\n' + textIndent(depth + 1) + test.err);
+            
+            console.log(output);
+        }
     });
 }
 

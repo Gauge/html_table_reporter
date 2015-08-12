@@ -47,6 +47,8 @@ You can change the modes in the config file `node_modules/html_table_reporter/co
                 Blah Blah error message/stacktrace printout of death
    ```
 
+* HTML_OUT (Dumps HTML to console)
+
 
 ### Additional Logging
 
