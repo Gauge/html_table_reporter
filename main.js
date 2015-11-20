@@ -4,9 +4,9 @@ var colors = require('chalk');
 
 var root = {};
 
-var COMPACT = "Compact",
-    VERBOSE = "Verbose",
-    SILENT = "Silent",
+var COMPACT = "COMPACT",
+    VERBOSE = "VERBOSE",
+    SILENT = "SILENT",
     HTML_OUT = "HTML";
 
 var config = {
@@ -20,7 +20,7 @@ var config = {
     */
     path: '', // full or relative path (relative to your execution folder)
     filename: 'report.html',
-    mode: 'Verbose'
+    mode: 'VERBOSE'
 };
 
 module.exports = function(runner, options) {
@@ -28,6 +28,23 @@ module.exports = function(runner, options) {
     config.path = options.savePath || config.path;
     config.filename = options.filename || config.filename;
     config.mode = options.mode || config.mode;
+
+    for (var i=0; (i+1)<process.argv.length; i++) {
+        if (process.argv[i] == '--report-path' || process.argv[i] == '-p') {
+            var list = process.argv[i+1].split('/');
+            var temp_path = '';
+            for (var i2=0; i2<list.length-1; i2++) {
+                temp_path += list[i2] + '/';
+            }
+
+            config.name = list[list.length-1];
+            config.path = temp_path;
+        }
+
+        if (process.argv[i] == '--report-mode' || process.argv[i] == '-m') config.mode = process.argv[i+1];
+    }
+    config.mode = config.mode.toUpperCase();
+
 
     var status = {
         pass: 0,
@@ -46,7 +63,6 @@ module.exports = function(runner, options) {
     runner.on('end', function() {
         var value = fs.readFileSync(path.join(__dirname, 'header.html'), "utf8"); // get header file
         var doc = '<html>' + value + '<body>'; // start doc
-
         var width = 695;
         var totalTests = status.pass + status.fail + status.pending;
         var passWidth = ((status.pass / totalTests) * width).toFixed(0);
@@ -80,6 +96,7 @@ module.exports = function(runner, options) {
             var filePath;
             if (config.filename != '') {
                 filePath = path.join(config.path, config.filename);
+                if (config.path && !fs.existsSync(config.path)) fs.mkdirSync(config.path);
             }
 
             console.log('\n');
@@ -109,7 +126,6 @@ module.exports = function(runner, options) {
         suite.guid = guid();
 
         if (!suite.root && config.mode != SILENT && config.mode != HTML_OUT) console.log(textIndent(depth) + suite.title);
-
     });
 
     runner.on('suite end', function(suite) {
@@ -145,7 +161,7 @@ module.exports = function(runner, options) {
                     addIndentation(depth + 2) +
                     '<td class="failDetail">' +
                     '<pre style="font-family: \'Courier New\', Courier, monospace;">' +
-                    '<code>' + test.err + '</code>' +
+                    '<code>' + ((test.log!=undefined) ? '|Test Logs|\n' + test.log + '\n' : '') + '|Error Message|\n' + test.err  + '</code>' +
                     '</pre>' +
                     '</td>' +
                     '</table>';
@@ -231,7 +247,16 @@ module.exports = function(runner, options) {
         if (config.mode == VERBOSE && test.ctx.log != undefined) {
             test.log = test.ctx.log;
             test.ctx.log = undefined;
-            var output = colors.grey(textIndent(depth+1) + test.log);
+            if (test.log == undefined) test.log = '';
+
+            var list = test.log.split('\n');
+            var temp = '';
+
+            for (var i=0; i<list.length; i++) {
+                temp += '\n' + textIndent(depth + 1) + list[i];
+            }
+
+            var output = colors.grey(textIndent(depth+1) + temp);
             console.log(output);
         }
     });
@@ -255,9 +280,18 @@ module.exports = function(runner, options) {
             
             output += colors.red(textIndent(depth) + 'x ' + test.title) + colors.gray(" <" + ((test.duration) ? test.duration : "NaN") + ">");
             
-            if (config.mode == SILENT || config.mode == VERBOSE) 
-                output += colors.gray('\n' + textIndent(depth + 1) + test.err);
-            
+            if (config.mode == SILENT || config.mode == VERBOSE) {
+                test.log = test.ctx.log;
+                test.ctx.log = undefined;
+                if (test.log == undefined) test.log = '';
+
+                var list = test.log.split('\n');
+                var temp = "";
+                for (var i=0; i<list.length; i++) {
+                    temp += '\n' + textIndent(depth + 1) + list[i];
+                }
+                output += colors.gray(((temp != '') ?'\n'+textIndent(depth + 1)+'|Test Logs|\n' + temp : '') + '\n' + textIndent(depth + 1) + '|Error Message|\n' + test.err);
+            }
             console.log(output);
         }
     });
