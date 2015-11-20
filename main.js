@@ -24,7 +24,14 @@ var config = {
 };
 
 module.exports = function(runner, options) {
+    var status = {
+        pass: 0,
+        fail: 0,
+        pending: 0,
+        duration: 0
+    };
 
+    // initialize configuration
     config.path = options.savePath || config.path;
     config.filename = options.filename || config.filename;
     config.mode = options.mode || config.mode;
@@ -46,16 +53,9 @@ module.exports = function(runner, options) {
     config.mode = config.mode.toUpperCase();
 
 
-    var status = {
-        pass: 0,
-        fail: 0,
-        pending: 0,
-        duration: 0
-    };
-
     runner.on('start', function() {
         if (config.mode != HTML_OUT) {
-            console.log('Mocha HTML Table Reporter v1.6.5\nNOTE: Tests sequence must complete to generate html report');
+            console.log('Mocha HTML Table Reporter v1.6.6\nNOTE: Tests sequence must complete to generate html report');
             console.log("Run Mode: " + config.mode + "\n");
         }
     });

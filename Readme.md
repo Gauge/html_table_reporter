@@ -7,20 +7,6 @@ npm install html_table_reporter
 mocha -R html_table_reporter ./testpath
 ```
 
-```
-mocha_config: {
-    reporter: 'good-mocha-html-reporter', //good-mocha-html-reporter, spec, nyan
-    timeout: 15000,
-    bail: false,
-    savePath: '', // the path to desired location
-    filename: 'report.html', // filename gets attached at the end of savePath
-    mode: 'Verbose'
-}
-
-var mocha = new Mocha(mocha_config);
-```
-
-
 ### Modes
 
 You can change the modes in the config file `node_modules/html_table_reporter/config.js`.
@@ -66,7 +52,7 @@ You can change the modes in the config file `node_modules/html_table_reporter/co
 
 ### Additional Logging
 
-I have claimed the variable name `log` from the mochas context object. The log element is of type string and
+I have claimed the variable name `log` from mochas context object. The log element is of type string and
 is displayed after the its test passes.
 
 ```
@@ -82,14 +68,27 @@ is displayed after the its test passes.
 By defult the path is set to the execution folder and will kick out a file called report.html
 ```
 // execution folder
-~\workspace> mocha -R html_table_reporter ./test
+~\workspace> mocha -R good-mocha-html-reporter ./test
 
 // output
 ~\workspace\report.html
 ```
 
+Alternatively you can use command line arguments:
+
 ```
-mocha_config: {
+-p    or    --report-path
+-m    or    --report-mode
+
+~/workspace> mocha -R good-mocha-html-reporter -p reports/myTestReport.html -m Compact ./test
+
+// output
+~\workspace\reports\myTestReport.html
+```
+
+You can also set it in the mocha.opts config file file
+```
+{
     reporter: 'good-mocha-html-reporter', //good-mocha-html-reporter, spec, nyan
     timeout: 15000,
     bail: false,
@@ -97,6 +96,4 @@ mocha_config: {
     filename: 'report.html', // filename gets attached at the end of savePath
     mode: 'Verbose'
 }
-
-var mocha = new Mocha(mocha_config);
 ```

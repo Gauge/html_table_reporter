@@ -1,6 +1,6 @@
 {
   "name": "good-mocha-html-reporter",
-  "version": "1.6.5",
+  "version": "1.6.6",
   "description": "A visually appealing html reporter for mocha",
   "keywords": [
     "mocha",
@@ -26,15 +26,5 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Gauge/html_table_reporter.git"
-  },
-  "readme": "![](http://i1343.photobucket.com/albums/o790/Benjamin_Pratt/Untitled_zpsfd5ab49c.png)\r\n\r\n## Basic install and use\r\n```\r\nnpm install html_table_reporter\r\n\r\nmocha -R html_table_reporter ./testpath\r\n```\r\n\r\n```\r\nmocha_config: {\r\n    reporter: 'good-mocha-html-reporter', //good-mocha-html-reporter, spec, nyan\r\n    timeout: 15000,\r\n    bail: false,\r\n    savePath: '', // the path to desired location\r\n    filename: 'report.html', // filename gets attached at the end of savePath\r\n    mode: 'Verbose'\r\n}\r\n\r\nvar mocha = new Mocha(mocha_config);\r\n```\r\n\r\n\r\n### Modes\r\n\r\nYou can change the modes in the config file `node_modules/html_table_reporter/config.js`.\r\n\r\n* Compact (Shows every test without detail)\r\n\r\n    ```\r\n        Login\r\n            √ navigate to site <2180>\r\n            √ type email address <160>\r\n            √ type password <70>\r\n            √ click the login button <80>\r\n            √ wait for login <663>\r\n            x handle popups <9>\r\n    ```\r\n\r\n* Silent  (Shows errors only)\r\n\r\n    ```\r\n        x handle popups <9>\r\n            Blah Blah error message/stacktrace printout of death\r\n    ```\r\n\r\n* Verbose (Shows every test in detail)\r\n\r\n    ```\r\n        Login\r\n            √ navigate to site <2180>\r\n            √ type email address <160>\r\n                Something a user has logged. This will be grey\r\n        contrasting the basic green and red text.\r\n\r\n        I am currently in the process of fixing indentation \r\n            √ type password <70>\r\n            √ click the login button <80>\r\n            √ wait for login <663>\r\n            x handle popups <9>\r\n                Blah Blah error message/stacktrace printout of death\r\n   ```\r\n\r\n* HTML_OUT (Dumps HTML to console)\r\n\r\n\r\n### Additional Logging\r\n\r\nI have claimed the variable name `log` from the mochas context object. The log element is of type string and\r\nis displayed after the its test passes.\r\n\r\n```\r\n  describe('Login', function(){\r\n    it('type email address', function(){\r\n        this.log = 'Something a user has logged.\\n\\nI am currently in the process of fixing indentation'\r\n    })\r\n  })\r\n```\r\n\r\n### Output Path\r\n\r\nBy defult the path is set to the execution folder and will kick out a file called report.html\r\n```\r\n// execution folder\r\n~\\workspace> mocha -R html_table_reporter ./test\r\n\r\n// output\r\n~\\workspace\\report.html\r\n```\r\n\r\n```\r\nmocha_config: {\r\n    reporter: 'good-mocha-html-reporter', //good-mocha-html-reporter, spec, nyan\r\n    timeout: 15000,\r\n    bail: false,\r\n    savePath: '', // the path to desired location\r\n    filename: 'report.html', // filename gets attached at the end of savePath\r\n    mode: 'Verbose'\r\n}\r\n\r\nvar mocha = new Mocha(mocha_config);\r\n```",
-  "readmeFilename": "Readme.md",
-  "bugs": {
-    "url": "https://github.com/Gauge/html_table_reporter/issues"
-  },
-  "homepage": "https://github.com/Gauge/html_table_reporter",
-  "_id": "good-mocha-html-reporter@1.6.5",
-  "scripts": {},
-  "_shasum": "6e4e8684b66713f0bb05be69e9c9c5ff4f2bb6a5",
-  "_from": "good-mocha-html-reporter@latest"
+  }
 }
