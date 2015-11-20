@@ -2,14 +2,12 @@
 
 ## Basic install and use
 ```
-npm install html_table_reporter
+npm install good-mocha-html-reporter
 
-mocha -R html_table_reporter ./testpath
+mocha -R good-mocha-html-reporter ./testpath
 ```
 
 ### Modes
-
-You can change the modes in the config file `node_modules/html_table_reporter/config.js`.
 
 * Compact (Shows every test without detail)
 
@@ -49,20 +47,6 @@ You can change the modes in the config file `node_modules/html_table_reporter/co
 
 * HTML_OUT (Dumps HTML to console)
 
-
-### Additional Logging
-
-I have claimed the variable name `log` from mochas context object. The log element is of type string and
-is displayed after the its test passes.
-
-```
-  describe('Login', function(){
-    it('type email address', function(){
-        this.log = 'Something a user has logged.\n\nI am currently in the process of fixing indentation'
-    })
-  })
-```
-
 ### Output Path
 
 By defult the path is set to the execution folder and will kick out a file called report.html
@@ -86,7 +70,7 @@ Alternatively you can use command line arguments:
 ~\workspace\reports\myTestReport.html
 ```
 
-You can also set it in the mocha.opts config file file
+Your final option is in the mocha.opts config file / options object
 ```
 {
     reporter: 'good-mocha-html-reporter', //good-mocha-html-reporter, spec, nyan
@@ -96,4 +80,17 @@ You can also set it in the mocha.opts config file file
     filename: 'report.html', // filename gets attached at the end of savePath
     mode: 'Verbose'
 }
+```
+
+### Additional Logging
+
+I have claimed the variable name `log` from mochas context object. The log element is of type string and
+is displayed after the its test passes.
+
+```
+  describe('Login', function(){
+    it('type email address', function(){
+        this.log = 'Something a user has logged.\n\nI am currently in the process of fixing indentation'
+    })
+  })
 ```
