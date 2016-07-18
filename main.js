@@ -11,11 +11,12 @@ var COMPACT = "COMPACT",
 
 var config = {
     /*
-        Modes: COMPACT, VERBOSE, SILENT
+        Modes: COMPACT, VERBOSE, SILENT, HTML_OUT
 
         COMPACT: Displays passed in compact and errors in compact
         VERBOSE: Displays passed with detail and errors with detail
         SILENT: Displays only errors with detail
+        HTML_OUT: Prints html data to command line
 
     */
     path: '', // full or relative path (relative to your execution folder)
@@ -44,7 +45,7 @@ module.exports = function(runner, options) {
                 temp_path += list[i2] + '/';
             }
 
-            config.name = list[list.length-1];
+            config.filename = list[list.length-1];
             config.path = temp_path;
         }
 
@@ -55,14 +56,14 @@ module.exports = function(runner, options) {
 
     runner.on('start', function() {
         if (config.mode != HTML_OUT) {
-            console.log('Mocha HTML Table Reporter v1.6.6\nNOTE: Tests sequence must complete to generate html report');
+            console.log('Mocha HTML Table Reporter v2.0.1\nNOTE: Tests sequence must complete to generate html report');
             console.log("Run Mode: " + config.mode + "\n");
         }
     });
 
-    runner.on('end', function() {
+    var onEnd = function () {
         var value = fs.readFileSync(path.join(__dirname, 'header.html'), "utf8"); // get header file
-        var doc = '<html>' + value + '<body>'; // start doc
+        var doc = '<html><head>' + value + '</head><body>'; // start doc
         var width = 695;
         var totalTests = status.pass + status.fail + status.pending;
         var passWidth = ((status.pass / totalTests) * width).toFixed(0);
@@ -88,6 +89,7 @@ module.exports = function(runner, options) {
             '<div class="innerDiv" style="width:' + pendWidth + 'px; background-color: DarkBlue; height:50px; float:left;">' + pendingPercent + '%</div>' +
             '</div></div>';
         doc += percentages;
+        
         doc += '<div id="reportTable">' + displayHTML(root) + '</div></body></html>'; // compile tests and finish the doc
 
         if (config.mode == HTML_OUT) console.log(doc);
@@ -112,7 +114,10 @@ module.exports = function(runner, options) {
                 console.log('No file location and name was given');
             }
         }
-    });
+    }
+
+    //runner.on('end', onEnd.bind(null));
+    process.on('exit', onEnd.bind(null));
 
     runner.on('suite', function(suite) {
         // calculate nesting level
@@ -244,20 +249,24 @@ module.exports = function(runner, options) {
             console.log(output);
         }
 
-        if (config.mode == VERBOSE && test.ctx.log != undefined) {
+        if (config.mode == VERBOSE) {
+            if (test.ctx == undefined) {
+                test.ctx = {log:undefined};
+            }
             test.log = test.ctx.log;
             test.ctx.log = undefined;
-            if (test.log == undefined) test.log = '';
 
-            var list = test.log.split('\n');
-            var temp = '';
+            if (test.log != undefined) {
 
-            for (var i=0; i<list.length; i++) {
-                temp += '\n' + textIndent(depth + 1) + list[i];
+                var temp = '';
+                var list = test.log.split('\n');
+                for (var i=0; i<list.length; i++) {
+                    temp += '\n' + textIndent(depth + 1) + list[i];
+                }
+
+                var output = colors.grey(textIndent(depth+1) + temp);
+                console.log(output);
             }
-
-            var output = colors.grey(textIndent(depth+1) + temp);
-            console.log(output);
         }
     });
 
@@ -281,18 +290,23 @@ module.exports = function(runner, options) {
             output += colors.red(textIndent(depth) + 'x ' + test.title) + colors.gray(" <" + ((test.duration) ? test.duration : "NaN") + ">");
             
             if (config.mode == SILENT || config.mode == VERBOSE) {
+                if (test.ctx == undefined){
+                    test.ctx = {log:undefined};
+                }
                 test.log = test.ctx.log;
                 test.ctx.log = undefined;
-                if (test.log == undefined) test.log = '';
 
-                var list = test.log.split('\n');
-                var temp = "";
-                for (var i=0; i<list.length; i++) {
-                    temp += '\n' + textIndent(depth + 1) + list[i];
+                if (test.log != undefined) {
+                    var list = test.log.split('\n');
+                    var temp = "";
+                    for (var i=0; i<list.length; i++) {
+                        temp += '\n' + textIndent(depth + 1) + list[i];
+                    }
+                    output += colors.gray(((temp != '') ?'\n'+textIndent(depth + 1)+'|Test Logs|\n' + temp : '') + '\n' + textIndent(depth + 1) + '|Error Message|\n' + test.err);
                 }
-                output += colors.gray(((temp != '') ?'\n'+textIndent(depth + 1)+'|Test Logs|\n' + temp : '') + '\n' + textIndent(depth + 1) + '|Error Message|\n' + test.err);
             }
             console.log(output);
+
         }
     });
 }
