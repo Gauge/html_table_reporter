@@ -13,12 +13,14 @@
     "name": "Gauge",
     "email": "Gauger16@gmail.com"
   },
-  "main": "main.js",
+  "main": "reporter.js",
   "devDependencies": {
-    "mocha": "1.6.x"
+    "mocha": "1.6.x",
+    "assert": "latest"
   },
   "dependencies": {
-    "chalk": "latest"
+    "chalk": "^1.1.3",
+    "dustjs-linkedin": "latest"
   },
   "engines": {
     "node": ">= 0.6.0"

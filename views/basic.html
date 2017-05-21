@@ -1,0 +1,220 @@
+﻿<html>
+    <head>
+        <title>Test Report</title>
+        <style type="text/css">
+            body {
+                font-family: Verdana;
+                font-size: 12px;
+                line-height: 12px;
+                font-weight: 500;
+                color: #3b3b3b;
+                -webkit-font-smoothing: antialiased;
+                font-smoothing: antialiased;
+                background: #2b2b2b;
+                min-width: 1000px;
+            }
+
+            .wrapper {
+                margin: 0 auto;
+                padding: 40px;
+                min-width: 1000px;
+            }
+
+            .table {
+                width: 100%;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+                display: table;
+            }
+
+            .table.suite {
+                border-bottom: 2px ridge;
+            }
+
+            .row {
+                display: table-row;
+            }
+
+            .row.header {
+                font-weight: 800;
+                color: black;
+                background: -webkit-linear-gradient(180deg, #E5ECF3, #CCD2D9); /* For Safari 5.1 to 6.0 */
+                background: -o-linear-gradient(180deg, #E5ECF3, #CCD2D9); /* For Opera 11.1 to 12.0 */
+                background: -moz-linear-gradient(180deg, #E5ECF3, #CCD2D9); /* For Firefox 3.6 to 15 */
+                background: linear-gradient(180deg, #E5ECF3, #CCD2D9); /* Standard syntax */
+            }
+
+            .row.passed {
+                background: -webkit-linear-gradient(180deg, #7EDF9F, #71C88F); /* For Safari 5.1 to 6.0 */
+                background: -o-linear-gradient(180deg, #7EDF9F, #71C88F); /* For Opera 11.1 to 12.0 */
+                background: -moz-linear-gradient(180deg, #7EDF9F, #71C88F); /* For Firefox 3.6 to 15 */
+                background: linear-gradient(180deg, #7EDF9F, #71C88F); /* Standard syntax */
+            }
+
+            .row.pending {
+                background: -webkit-linear-gradient(180deg, #ADD8E6, #9BC2CF); /* For Safari 5.1 to 6.0 */
+                background: -o-linear-gradient(180deg, #ADD8E6, #9BC2CF); /* For Opera 11.1 to 12.0 */
+                background: -moz-linear-gradient(180deg, #ADD8E6, #9BC2CF); /* For Firefox 3.6 to 15 */
+                background: linear-gradient(180deg, #ADD8E6, #9BC2CF); /* Standard syntax */
+            }
+
+            .row.failed {
+                background: -webkit-linear-gradient(180deg, #E0A7A7, #C99696); /* For Safari 5.1 to 6.0 */
+                background: -o-linear-gradient(180deg, #E0A7A7, #C99696); /* For Opera 11.1 to 12.0 */
+                background: -moz-linear-gradient(180deg, #E0A7A7, #C99696); /* For Firefox 3.6 to 15 */
+                background: linear-gradient(180deg, #E0A7A7, #C99696); /* Standard syntax */
+            }
+
+            .cell {
+                padding: 4px 4px;
+                display: table-cell;
+                border-right: 1px solid black;
+            }
+
+            .cell.title {
+                width: auto;
+            }
+
+            .cell.duration {
+                width: 90px;
+            }
+
+            .cell.status {
+                width: 60px;
+                color: white;
+                text-align: center;
+            }
+
+            .cell.status.passed {
+                background-color: DarkGreen;
+            }
+
+            .cell.status.failed {
+                background-color: DarkRed;
+            }
+
+            .cell.status.pending {
+                background-color: DarkBlue;
+            }
+
+            .cell.header {
+                width:100px;
+                text-align: left;
+            }
+            .cell.header.passed {
+                color: DarkGreen;
+            }
+
+            .cell.header.failed {
+                color: DarkRed;
+            }
+
+            .cell.header.pending {
+                color: DarkBlue;
+            }
+
+            .cell.header.duration {
+                color: black;
+                text-align:right;
+            }
+
+            .cell.indent {
+                width: 20px;
+                padding: 0px;
+                margin: 0px;
+                border: 0px;
+            }
+
+            .cell.expander {
+                width: 13px;
+                padding-right:0px;
+                padding-left:6px;
+            }
+           .expanded {
+		        background-repeat: no-repeat;
+		        width: 16;
+		        height: 16;
+		        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAA9QTFRFeXl53d3dmpqasbGx////GU0iEgAAAAV0Uk5T/////wD7tg5TAAAAK0lEQVQI12NwgQIG0hhCDAwMTCJAhqMCA4MiWEoIJABiOCooQhULi5BqMgB2bh4svs8t+QAAAABJRU5ErkJggg==');
+	        }
+
+	        .collapsed {
+		        background-repeat: no-repeat;
+		        width: 16;
+		        height: 16;
+		        background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAPUExURXl5ed3d3ZqamrGxsf///xlNIhIAAAAFdFJOU/////8A+7YOUwAAAAlwSFlzAAAOwwAADsMBx2+oZAAAABl0RVh0U29mdHdhcmUAQWRvYmUgSW1hZ2VSZWFkeXHJZTwAAAAvSURBVBjTY3CBAlSGI4whBGU4KkAZQgwQhqMClOHMgC4CV4PQBTcHYbILFoaLCwCrIB7+CSEIHAAAAABJRU5ErkJggg==');
+	        }
+        </style>
+
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script>
+            var showHide = function (id, pid) {
+                var element = $("#" + id);
+                var childElements = $("." + id);
+
+                if (element.css("display") == "none") {
+                    childElements.toggle(false);
+                    childElements.click();
+                }
+                else
+                {
+                    childElements.toggle();
+                    childElements.click();
+                }
+	        }
+        </script>
+    </head>
+    <body>
+        <div class="wrapper">
+            {+displaySuite/}
+        </div>
+    </body>
+</html>
+
+{<displaySuite}
+    <div class="table suite" >
+        <div id="{guid}" class="row header {pGUID}" onclick="showHide('{guid}','{pGUID}')">
+            {#view}{#depth}<div class="cell indent" style="background-color: rgb({.},{.},{.})"></div>{/depth}{/view}
+            <div id="expander" class="expanded"></div>
+            <div class="cell title">{title}</div>
+            {#status}
+            <div class="cell header passed">P:&nbsp;{passed}</div>
+            <div class="cell header failed">F:&nbsp;{failed}</div>
+            <div class="cell header pending">P:&nbsp;{pending}</div>
+            <div class="cell header duration">{durationFormated}</div>
+            {/status}
+        </div>
+    </div>
+    {#tests}
+        {+displayTest /}
+    {/tests}
+    {#suites}
+        {+displaySuite /}
+    {/suites}
+{/displaySuite}
+
+{<displayTest}
+    <div class="table">
+        <div id="{guid}" class="row {pGUID} {status}" onclick="showHide('{guid}', '{pGUID}')">
+            {#view}{#depth}<div class="cell indent" style="background-color: rgb({.},{.},{.})"></div>{/depth}{/view}
+            <div id="expander" class="expanded"></div>
+            <div class="cell duration">{duration} ms</div>
+            <div class="cell title">{title}</div>
+            <div class="cell status {status}">{status}</div>
+        </div>
+    </div>
+    {#error}
+        <div class="table">
+            <div class="row {guid} {status}">
+                {#view}{#subDepth}<div class="cell indent" style="background-color: rgb({.},{.},{.})"></div>{/subDepth}{/view}
+                <div class="cell">{.}</div>
+            </div>
+        </div>
+    {/error}
+    {#log}
+    <div class="table">
+        <div class="row {guid} {status}">
+            {#view}{#subDepth}<div class="cell indent" style="background-color: rgb({.},{.},{.})"></div>{/subDepth}{/view}
+            <div class="cell">{.}</div>
+        </div>
+    </div>
+    {/log}
+{/displayTest}
